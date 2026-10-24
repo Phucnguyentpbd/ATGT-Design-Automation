@@ -11,3 +11,10 @@ __pycache__/
 *.xls
 local-sources/
 output/
+
+# Keep user CAD standards and inspection products local
+*.lin
+*.sqlite
+*.sqlite3
+*.db
+local-manifests/
