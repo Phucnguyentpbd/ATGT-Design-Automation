@@ -68,6 +68,7 @@ def build(pdf_path: Path, out: Path, catalog: Path | None=None, lin: Path | None
     CREATE TABLE sign_index(code TEXT PRIMARY KEY,pages_json TEXT NOT NULL,count INTEGER,status TEXT);
     CREATE TABLE mark_index(code TEXT PRIMARY KEY,pages_json TEXT NOT NULL,count INTEGER,status TEXT);
     CREATE TABLE cad_assets(asset_id TEXT PRIMARY KEY,source_path TEXT,sha256 TEXT,candidate_codes_json TEXT,status TEXT);
+    CREATE TABLE line_patterns(name TEXT PRIMARY KEY,description TEXT,pattern_json TEXT,source_sha256 TEXT,status TEXT);
     CREATE TABLE source_clauses(reference TEXT,page INTEGER,excerpt TEXT,status TEXT);
     CREATE INDEX clause_by_reference ON source_clauses(reference,page);
     """)
@@ -140,11 +141,38 @@ def build(pdf_path: Path, out: Path, catalog: Path | None=None, lin: Path | None
             else: unmatched+=1
             db.execute("INSERT INTO cad_assets VALUES (?,?,?,?,?)",
                        (asset["asset_id"],path,asset["sha256"],json.dumps(variants),"unverified"))
+    lin_count=0
+    if lin is not None:
+        blob=lin.read_bytes()
+        try: raw=blob.decode("utf-8-sig")
+        except UnicodeDecodeError: raw=blob.decode("cp1252")
+        lin_sha=digest(lin)
+        pending=None
+        for raw_line in raw.splitlines():
+            row=raw_line.strip()
+            if not row or row.startswith(";"): continue
+            if row.startswith("*"):
+                if pending is not None: raise ValueError("Missing LIN pattern definition")
+                pending=row[1:].split(",",1)
+                if len(pending)!=2: raise ValueError("Malformed LIN heading")
+                continue
+            if pending is None: raise ValueError("Orphan LIN stroke")
+            fields=row.split(",")
+            if fields[0].strip().upper()!="A":
+                raise ValueError("Only simple LIN definitions are currently supported")
+            try: strokes=[float(x) for x in fields[1:]]
+            except ValueError as exc: raise ValueError("Complex LIN pattern requires inspection") from exc
+            db.execute("INSERT INTO line_patterns VALUES (?,?,?,?,?)",
+                       (pending[0].strip(),pending[1].strip(),json.dumps(strokes),lin_sha,"unverified"))
+            lin_count+=1
+            pending=None
+        if pending is not None: raise ValueError("Incomplete LIN file")
     db.commit()
     results={"qcvn_pdf_sha256":PDF_SHA,"pages":403,"articles":len(arts),"annexes":len(ANNEX),
              "source_sign_codes":len(signs),"source_mark_codes":len(marks),
              "clause_anchors":clauses,"needs_visual_review_pages":visual,
              "dwg_count":sum(grouped.values()),"dwg_groups":dict(grouped),
+             "linetype_patterns":lin_count,
              "suggested_single":candidates_single,"suggested_ambiguous":ambiguous,
              "unmatched":unmatched,"approved_cad_rules":0,
              "caution":"All rule/sign asset mappings remain unverified; no automated CAD write is authorised"}
