@@ -1,0 +1,40 @@
+{
+  "version": "2026-10-24-library-rar-intake",
+  "source_archive": {
+    "basename": "Library.rar",
+    "sha256": "e471f9644250d15084d5ad0fb79543a5bd7aaff03c06a109afc760a68a3a3011",
+    "size_bytes": 55921847
+  },
+  "inventory": {
+    "total_dwg": 338,
+    "total_bytes": 69791520,
+    "header": "AC1021",
+    "distinct_sha256": 338,
+    "by_group": {
+      "Bien_Cam": 69,
+      "Bien_Chi_Dan": 122,
+      "Bien_Hieu_Lenh": 33,
+      "Bien_Nguy_Hiem": 83,
+      "Bien_Phu": 31
+    },
+    "skipped_autocad_lock_files": 2,
+    "source_geometry_verified": false,
+    "source_cad_units_verified": false,
+    "sign_codes_verified": 0
+  },
+  "review": {
+    "exception_examples": [
+      {
+        "file": "Bien_Cam/135.dwg",
+        "reason": "DP.135 in versioned plan; must cross-check DWG geometry"
+      },
+      {
+        "file": "Bien_Chi_Dan/420.dwg",
+        "reason": "R.420 in versioned plan; legacy directory grouping is not authoritative"
+      }
+    ],
+    "special_family_file_count": 21,
+    "filename_variant_suffix_count": 7,
+    "policy": "Do not infer canonical sign_code from folder or filename. Keep catalog draft until CAD geometry is inspected."
+  }
+}
