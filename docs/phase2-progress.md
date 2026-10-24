@@ -1,6 +1,6 @@
 # Phase 2 — triển khai kho tri thức và tài sản CAD (24/10/2026)
 
-**Trạng thái: đang triển khai**, chưa có quyền đọc thư viện DWG trên máy Windows, chưa thao tác Civil 3D, chưa tự bố trí biển/vạch.
+**Trạng thái: đang triển khai**. Đã nhận và giải nén Library.rar do người dùng gửi; chưa thao tác Civil 3D và chưa tự bố trí biển/vạch.
 
 ## Những gì đã thực hiện
 
@@ -52,7 +52,18 @@ Chưa có thao tác tự duyệt; việc phát hành quy tắc `approved` phải
 ## Những phần chưa thể thực hiện
 
 - CloudHarness MCP hiện trả lỗi **HTTP 404** khi mở workspace, nên không thể dùng kết nối này để đọc trực tiếp thư mục `D:\...` trên máy người dùng.
-- Chưa có dữ liệu byte của 338 DWG trên môi trường phân tích; chưa thể xác minh kiểm kê gốc (69/122/33/83/31).
+- Đã nhận đủ 338 DWG trong archive Library.rar và kiểm kê SHA-256, header, tên nhóm; còn thiếu công cụ đọc DWG để kiểm định hình học, units, điểm chèn, hướng và kích thước.
 - Chưa triển khai kiểm tra hình học/thông số CAD bên trong DWG, Civil 3D/C# writer, đối chiếu 30 ca chuyên môn và xuất Excel thành phẩm.
 
 **Ranh giới an toàn:** không đưa CAD/PDF/Excel nguồn nội bộ lên repository đang ở trạng thái Public.
+
+
+## Cập nhật sau khi người dùng tải Library.rar (24/10/2026)
+
+- SHA-256 archive: `e471f9644250d15084d5ad0fb79543a5bd7aaff03c06a109afc760a68a3a3011`; kích thước file nén: **55.921.847 byte**.
+- Đã giải nén thực tế **338 DWG, 69.791.520 byte**; tất cả có header `AC1021`, SHA-256 riêng và không rỗng.
+- Kiểm kê theo thư mục: `Bien_Cam` 69; `Bien_Chi_Dan` 122; `Bien_Hieu_Lenh` 33; `Bien_Nguy_Hiem` 83; `Bien_Phu` 31 — **khớp 100% số lượng ghi trong plan**.
+- Thêm metadata khóa nguồn ở [`data/source-locks/sign-library-summary.json`](../data/source-locks/sign-library-summary.json). **Không commit** byte DWG nguồn vì repository đang public. Catalog 338 dòng đầy đủ cung cấp riêng ở cuộc trò chuyện.
+- Trong thư viện còn 2 file khóa AutoCAD `.dwl`/`.dwl2`, đã loại khỏi bộ 338 DWG.
+- Tất cả mã biển vẫn **chưa kiểm định**. Kiểm tra cẩn thận `Bien_Cam/135.dwg` vì mã tham chiếu có tiền tố `DP.135` và `Bien_Chi_Dan/420.dwg` vì `R.420`; 21 mã họ đặc biệt E/G/H và 7 file có hậu tố biến thể cần đối chiếu ảnh/hình học và quy chuẩn. Không coi thư mục là căn cứ gắn tiền tố chuẩn.
+- Bước tiếp theo: mở DWG bằng Civil 3D/ODA hoặc nguồn tương thích, đọc units/point/extents/layer/block/attributes và tạo preview; đánh dấu trạng thái kiểm định cho từng asset, sau đó kiểm tra chèn vào DWG thử.
