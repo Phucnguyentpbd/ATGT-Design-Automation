@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-24",
+  "source_file": "QCVN 41:2024/BGTVT",
+  "source_sha256": "84825a72c4605b65485f3d31a606525a9bc96c970a5200defc0781496ddbbd46",
+  "pdf_pages": 403,
+  "indexed_pages": 403,
+  "main_articles": 84,
+  "annexes": 13,
+  "clauses_indexed": 412,
+  "source_sign_codes": 502,
+  "source_marking_codes": 50,
+  "figure_page_references": 318,
+  "dwg_archive_sha256": "e471f9644250d15084d5ad0fb79543a5bd7aaff03c06a109afc760a68a3a3011",
+  "dwg_file_count": 338,
+  "dwg_total_bytes": 69791520,
+  "groups": {
+    "Bien_Cam": 69,
+    "Bien_Chi_Dan": 122,
+    "Bien_Hieu_Lenh": 33,
+    "Bien_Nguy_Hiem": 83,
+    "Bien_Phu": 31
+  },
+  "crosswalk": {
+    "single_candidate": 326,
+    "multiple_candidates": 9,
+    "no_candidate": 3,
+    "geometry_approved": 0
+  },
+  "lin_patterns_parsed": 14,
+  "rule_drafts": 19,
+  "rule_approvals": 0,
+  "verification": {
+    "source_checks": "passed",
+    "local_ingestion_checks": 11,
+    "local_unit_tests_passed": 38,
+    "github_actions_tests": "not separately confirmed"
+  },
+  "source_boundaries": "Original text and DWG/PDF/XLSX source bytes are intentionally excluded from the public repository. SQLite evidence package distributed privately in conversation."
+}
