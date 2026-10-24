@@ -45,3 +45,17 @@ No QCVN rule is treated as verified merely because its numerical value appears i
 ## Security
 
 Do not commit proprietary approved drawings or copyrighted source standards without authorization, nor tokens or personal project data. Put local sources outside version control. See `.gitignore`.
+
+## QCVN knowledge ingestion — 24 October 2026
+
+The locked 403-page source PDF has been fully indexed locally (84 articles, 13 annexes, 502 mentioned sign codes, 50 marking codes), including 338 DWG review records and 14 LIN patterns. The private evidence SQLite archive was supplied in the ChatGPT conversation; original standards and CAD drawings are **not uploaded** to this public repository. Local structural tests: **38 passed**. See [detailed knowledge coverage](docs/knowledge-completion-2026-10-24.md).
+
+Rebuild against your own approved source PDF and the reviewed 338-file catalog:
+
+```bash
+python -m pip install -e ".[knowledge]" pytest
+python -m atgt.qcvn_ingest build --pdf QCVN_41_2024_mo_khoa.pdf --catalog atgt-sign-library-catalog.json --lin VACH_SON_QCVN41_2024.lin --out local-manifests/knowledge
+python -m atgt.qcvn_ingest search --db local-manifests/knowledge/atgt-knowledge.sqlite --text P.102
+```
+
+**Not certified for automated design:** indexed QCVN evidence and filename-derived CAD code suggestions are distinct from expert-approved rules and geometrically verified DWG blocks.
