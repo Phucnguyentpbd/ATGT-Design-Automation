@@ -1,0 +1,29 @@
+{
+  "rule_id": "QCVN41-2024-12-TABLE2-SIGN-SIZE",
+  "version": 1,
+  "status": "draft",
+  "source_sha256": "84825a72c4605b65485f3d31a606525a9bc96c970a5200defc0781496ddbbd46",
+  "citation": "QCVN 41:2024/BGTVT, Dieu 12, Bang 2, trang PDF 14",
+  "road_types": [
+    "ordinary",
+    "divided_rural"
+  ],
+  "payload": {
+    "sign_size_factors": {
+      "ordinary": {
+        "prohibition_mandatory_warning": "1.25",
+        "guide": "1.5"
+      },
+      "divided_rural": {
+        "prohibition_mandatory_warning": "1.8",
+        "guide": "2.0"
+      }
+    },
+    "exceptions_required": [
+      "median sign uses factor 1 and its outer size cannot exceed median width",
+      "low-grade rural roads, transition segments and special cases require Article 12 review",
+      "factor applies to appropriate base dimensions once, not to already scaled CAD assets",
+      "sign size factors do not apply to road markings"
+    ]
+  }
+}
