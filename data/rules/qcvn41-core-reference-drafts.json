@@ -1,0 +1,283 @@
+{
+  "version": "2026-10-24",
+  "qcvn_sha256": "84825a72c4605b65485f3d31a606525a9bc96c970a5200defc0781496ddbbd46",
+  "status": "draft_requires_independent_validation",
+  "automatic_cad_execution_allowed": false,
+  "source_note": "Structured notes from uploaded QCVN 41:2024; validate original layout, figures, tables and exceptions before approving.",
+  "rules": [
+    {
+      "id": "ROAD_DIVIDED_DEF",
+      "source_page": 5,
+      "clause": "3.10",
+      "topic": "road_class",
+      "parameters": {
+        "physical_median_required": true,
+        "paint_only_not_divided": true
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_FACTOR_ORDINARY",
+      "source_page": 14,
+      "clause": "Điều 12, Bảng 2",
+      "topic": "sign_size",
+      "parameters": {
+        "road": "ordinary",
+        "prohibition_mandatory_warning": "1.25",
+        "guide": "1.5"
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_FACTOR_DIVIDED_RURAL",
+      "source_page": 14,
+      "clause": "Điều 12, Bảng 2",
+      "topic": "sign_size",
+      "parameters": {
+        "road": "divided_rural",
+        "prohibition_mandatory_warning": "1.8",
+        "guide": "2.0"
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_FACTOR_MEDIAN",
+      "source_page": 14,
+      "clause": "Điều 12, ghi chú Bảng 2",
+      "topic": "sign_size_exception",
+      "parameters": {
+        "median_factor": "1",
+        "outer_size_must_fit_median": true
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_FACTOR_RURAL_VILLAGE",
+      "source_page": 14,
+      "clause": "Điều 12, ghi chú Bảng 2",
+      "topic": "sign_size_exception",
+      "parameters": {
+        "road": "village",
+        "factor": "1"
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_FACTOR_LOW_GRADE",
+      "source_page": 14,
+      "clause": "12.4",
+      "topic": "sign_size_exception",
+      "parameters": {
+        "allowed_factors": [
+          "1.25",
+          "1.0",
+          "0.75"
+        ],
+        "requires_case_review": true
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_FACTOR_TEMPORARY",
+      "source_page": 14,
+      "clause": "12.5",
+      "topic": "sign_size_exception",
+      "parameters": {
+        "candidate_factors": [
+          "0.5",
+          "0.75"
+        ],
+        "requires_case_review": true
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_LOCATION_SIDE",
+      "source_page": 17,
+      "clause": "16.2",
+      "topic": "placement",
+      "parameters": {
+        "default_side": "right_or_overhead",
+        "additional_left": "conditional"
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_LATERAL_STANDARD",
+      "source_page": 18,
+      "clause": "16.3",
+      "topic": "placement",
+      "parameters": {
+        "min_m": "0.5",
+        "max_m": "1.7",
+        "special_max_m": "3.5",
+        "must_not_intrude_on_carriageway": true
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_HEIGHT_STANDARD",
+      "source_page": 19,
+      "clause": "18.2",
+      "topic": "height",
+      "parameters": {
+        "outside_populated_m": "1.8",
+        "inside_populated_m": "2.0",
+        "special_min_m": "1.2",
+        "special_max_m": "5.0"
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_HEIGHT_S507",
+      "source_page": 19,
+      "clause": "18.2",
+      "topic": "height",
+      "parameters": {
+        "sign_code": "S.507",
+        "min_m": "1.2",
+        "max_m": "1.5"
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGNS_PER_POST",
+      "source_page": 19,
+      "clause": "18.3",
+      "topic": "grouping",
+      "parameters": {
+        "max_faces": 3,
+        "order": [
+          "prohibition",
+          "mandatory",
+          "warning",
+          "guide"
+        ]
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "COMPOSITE_SIGN_EXCEPTION",
+      "source_page": 19,
+      "clause": "18.4",
+      "topic": "grouping_exception",
+      "parameters": {
+        "composite_plate_conditionally_allowed": true
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "SIGN_PRIORITY",
+      "source_page": 7,
+      "clause": "4.1",
+      "topic": "hierarchy",
+      "parameters": {
+        "order": [
+          "traffic_officer",
+          "traffic_light",
+          "sign",
+          "road_marking",
+          "marker_barrier",
+          "audio"
+        ]
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "MARKINGS_FROM_APPENDIX_G",
+      "source_page": 62,
+      "clause": "50",
+      "topic": "marking_reference",
+      "parameters": {
+        "appendix": "G"
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "MARK_1_1",
+      "source_page": 158,
+      "clause": "Phụ lục G, vạch 1.1",
+      "topic": "marking_dimensions",
+      "parameters": {
+        "code": "1.1",
+        "color": "yellow",
+        "width_m": "0.15",
+        "dash_m": [
+          "1",
+          "3"
+        ],
+        "gap_m": [
+          "2",
+          "6"
+        ],
+        "ratio": "1:2"
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "MARK_1_2",
+      "source_page": 159,
+      "clause": "Phụ lục G, vạch 1.2",
+      "topic": "marking_dimensions",
+      "parameters": {
+        "code": "1.2",
+        "color": "yellow",
+        "width_m": "0.15",
+        "continuous": true
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "MARK_2_1",
+      "source_page": 164,
+      "clause": "Phụ lục G, vạch 2.1",
+      "topic": "marking_dimensions",
+      "parameters": {
+        "code": "2.1",
+        "color": "white",
+        "width_m": "0.15",
+        "dash_m": [
+          "1",
+          "3"
+        ],
+        "gap_m": [
+          "3",
+          "9"
+        ]
+      },
+      "status": "draft",
+      "cad_enabled": false
+    },
+    {
+      "id": "MARK_2_2",
+      "source_page": 165,
+      "clause": "Phụ lục G, vạch 2.2",
+      "topic": "marking_dimensions",
+      "parameters": {
+        "code": "2.2",
+        "color": "white",
+        "width_m": "0.15",
+        "continuous": true
+      },
+      "status": "draft",
+      "cad_enabled": false
+    }
+  ]
+}
