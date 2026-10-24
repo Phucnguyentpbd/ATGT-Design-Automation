@@ -11,7 +11,7 @@ $python = (Get-Command py -ErrorAction SilentlyContinue)
 if ($python) {
     & py -m atgt.inventory_cli --sign-library "$LibraryPath" --output "$Output" --expected "data/source-locks/sign-library-summary.json" --review-output "$ReviewOutput"
 } else {
-    & python -m atgt.inventory_cli --sign-library "$LibraryPath" --output "$Output"
+    & python -m atgt.inventory_cli --sign-library "$LibraryPath" --output "$Output" --expected "data/source-locks/sign-library-summary.json" --review-output "$ReviewOutput"
 }
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Write-Host "Source lock verified; metadata-only inventory written to $Output"
