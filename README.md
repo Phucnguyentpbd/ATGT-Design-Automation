@@ -2,7 +2,7 @@
 
 **Status: prototype core only; NOT an approved automatic road-safety design system.**
 
-This repository is scaffolded from `docs/implementation-plan-v2.md` (24 Oct 2026). The plan is the implementation source of truth, including its Phase 1 approved-template update. Scope for automation: ordinary roads and divided roads outside urban areas; urban roads and expressways remain blocked. Source CAD, QCVN PDF, Excel template and sample approved projects are **not bundled** because the plan only supplies Windows paths and fingerprints, not their bytes.
+This repository is scaffolded from `docs/implementation-plan-v2.md` (24 Oct 2026). The plan is the implementation source of truth, including its Phase 1 approved-template update. Scope for automation: ordinary roads and divided roads outside urban areas; urban roads and expressways remain blocked. Source CAD, QCVN PDF, Excel template and sample approved projects are **not bundled**. Their original bytes are deliberately excluded from this public GitHub repository, though some files have been reviewed in private conversation attachments.
 
 ## What is implemented
 
@@ -12,7 +12,7 @@ This repository is scaffolded from `docs/implementation-plan-v2.md` (24 Oct 2026
 - Paint area from explicit verified painted intervals and station-range clipping (not guessed dash geometry).
 - Missing/stale snapshot is represented as `None`, never a misleading zero.
 - Unit tests for key invariants.
-- **Phase 2 in progress:** read-only versioned DWG inventory, 14-pattern `.lin` parser, draft-only QCVN import, SQLite review/approval gate and Windows local library scan. See [Phase 2 status](docs/phase2-progress.md).
+- **Phase 2 in progress:** read-only versioned DWG inventory, 14-pattern `.lin` parser, draft-only QCVN import, SQLite review/approval gate and Windows local library scan. **The user-uploaded Library.rar was inspected: 338 DWGs match the locked 69/122/33/83/31 group counts; all geometry/sign-code statuses remain unverified.** See [Phase 2 status](docs/phase2-progress.md).
 
 ## Quick start
 
@@ -27,7 +27,7 @@ python -m pytest
 powershell -ExecutionPolicy Bypass -File .\scripts\scan_atgt_library.ps1
 ```
 
-The inventory remains local at `local-manifests/atgt-signs.json`. A metadata scan is **not** DWG geometry verification or license to draw. See [Phase 2 status](docs/phase2-progress.md).
+The scanner verifies counts and byte sizes against `data/source-locks/sign-library-summary.json`. The detailed inventory remains local at `local-manifests/atgt-signs.json`, with a separate `local-manifests/atgt-review-queue.json`. A metadata scan is **not** DWG geometry verification or license to draw. See [Phase 2 status](docs/phase2-progress.md).
 
 ## Next implementation gates
 
