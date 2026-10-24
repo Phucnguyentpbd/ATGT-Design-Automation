@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -39,7 +40,7 @@ class RuleStore:
 
     def add_draft(self, rule_id: str, version: int, source_sha256: str,
                   citation: str, road_types: tuple[str, ...], payload: dict) -> None:
-        if not rule_id or version < 1 or len(source_sha256) != 64 or not citation:
+        if not rule_id or version < 1 or not re.fullmatch(r"[0-9a-fA-F]{64}", source_sha256) or not citation:
             raise ValueError("Draft requires ID, version, SHA-256 source and citation")
         if not road_types or any(r not in {"ordinary", "divided_rural", "urban", "expressway"} for r in road_types):
             raise ValueError("Invalid road scope")
@@ -75,7 +76,12 @@ class RuleStore:
         """Never execute urban/expressway rules in the first automation release."""
         if road_type not in {"ordinary", "divided_rural"}:
             return []
-        rows = self.connection.execute("SELECT * FROM rules WHERE status='approved'").fetchall()
+        # Select the version before filtering its road scope. A new approved
+        # version may deliberately remove a road type from the previous scope.
+        rows = self.connection.execute("""SELECT r.* FROM rules r
+            WHERE r.status='approved' AND r.version=(SELECT MAX(v.version)
+                FROM rules v WHERE v.rule_id=r.rule_id AND v.status='approved')
+            ORDER BY r.rule_id""").fetchall()
         return [r for row in rows if road_type in (r := self._from_row(row)).road_types]
 
     @staticmethod

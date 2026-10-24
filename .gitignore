@@ -18,3 +18,9 @@ output/
 *.sqlite3
 *.db
 local-manifests/
+.harkness/
+bin/
+obj/
+# Leftover isolated Core Console startup temp files (not project content)
+/ATGTInspection/
+/ErrorReports/

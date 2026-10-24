@@ -1,6 +1,10 @@
 # ATGT Design Automation — implementation foundation
 
-**Status: prototype core only; NOT an approved automatic road-safety design system.**
+**Hiện có knowledge, kiểm kê nguồn và lập phương án 3.1a/3.1b/4.4. Chưa có bộ thiết kế toàn tuyến, bộ ghi Civil hoặc xuất Excel hoàn chỉnh.**
+
+Đã rà soát và sửa các lỗi về đo bóc, phiên bản quy tắc và dựng lại knowledge. Xem [báo cáo rà soát](docs/audit-and-rules-2026-10-24.md), [quy tắc vạch sơn](docs/marking-rules.md) và [hợp đồng làm việc cho agent](docs/agent-workflow.md).
+
+Dùng trực tiếp `TEMPLATE_VACH_SON_ATGT_QCVN41_2024.dwg` và `VACH_SON_QCVN41_2024.lin` do người dùng cung cấp, không tạo thêm thư viện từ các dự án mẫu. Việc đọc cách gắn mũi tên/lý trình từ `BD TK ATGT DA DT.633.dwg` được người dùng dời sang lượt sau.
 
 This repository is scaffolded from `docs/implementation-plan-v2.md` (24 Oct 2026). The plan is the implementation source of truth, including its Phase 1 approved-template update. Scope for automation: ordinary roads and divided roads outside urban areas; urban roads and expressways remain blocked. Source CAD, QCVN PDF, Excel template and sample approved projects are **not bundled**. Their original bytes are deliberately excluded from this public GitHub repository, though some files have been reviewed in private conversation attachments.
 
@@ -17,7 +21,7 @@ This repository is scaffolded from `docs/implementation-plan-v2.md` (24 Oct 2026
 ## Quick start
 
 ```bash
-python -m pip install -e . pytest
+python -m pip install -e ".[knowledge]" pytest
 python -m pytest
 ```
 
@@ -32,10 +36,10 @@ The scanner verifies counts and byte sizes against `data/source-locks/sign-libra
 ## Next implementation gates
 
 1. **Sources and regulatory knowledge**: ingest/verify original QCVN 41:2024 PDF (`84825A72C4605B65485F3D31A606525A9BC96C970A5200DEFC0781496DDBBD46`) and review every executable rule against original pages, tables and figures. Establish SQLite index and rule approval workflow.
-2. **Asset catalog**: read/verify 338 sign DWGs from `AtgtPro/Library` (no renaming). Maintain full `sign_code` such as `P.102`, separate versioned `asset_id`, units, extents, orientation, provenance and CAD insertion tests; identify a source for marking assets.
+2. **Asset catalog**: read/verify 338 sign DWGs from `AtgtPro/Library` (no renaming). Maintain full `sign_code` such as `P.102`, separate versioned `asset_id`, units, extents, orientation, provenance and CAD insertion tests. Marking DWG/LIN sources are already supplied; geometry still needs verification.
 3. **Decision interface**: implement `atgt_search`, `atgt_get`, `atgt_evaluate_rules`, `atgt_resolve_asset`, `atgt_validate_plan` against approved rules; missing evidence must block only affected decisions.
 4. **Civil 3D integration**: single writer using verified C# / Civil MCP; copy input DWG, batch execution, read-back and idempotency; no blind retry on timeout.
-5. **Quantity export**: use the approved workbook `Book2(1).xlsx` (SHA-256 `19672f2be596f471afbfeef0294b1831e1c148a14030dcc901f71f39f8d73985`) as a *copy*; preserve key layout, strip old values/external links, recalc in Excel, test print areas and manual post-column preservation by stable cluster IDs.
+5. **Quantity export**: use the current workbook `Book2.xlsx` (SHA-256 `19672f2be596f471afbfeef0294b1831e1c148a14030dcc901f71f39f8d73985`) as a *copy*; preserve key layout, strip old values/external links, recalc in Excel, test print areas and manual post-column preservation by stable cluster IDs.
 6. **End-to-end validation**: approved sample DWG+PDF, independent reviewer, at least 30 specialist cases, one ordinary and one divided road.
 
 ## Important exclusions
@@ -48,7 +52,7 @@ Do not commit proprietary approved drawings or copyrighted source standards with
 
 ## QCVN knowledge ingestion — 24 October 2026
 
-The locked 403-page source PDF has been fully indexed locally (84 articles, 13 annexes, 502 mentioned sign codes, 50 marking codes), including 338 DWG review records and 14 LIN patterns. The private evidence SQLite archive was supplied in the ChatGPT conversation; original standards and CAD drawings are **not uploaded** to this public repository. Local structural tests: **38 passed**. See [detailed knowledge coverage](docs/knowledge-completion-2026-10-24.md).
+The locked 403-page source PDF has been indexed locally (84 articles, 13 annexes, 502 mentioned sign codes, 50 marking codes), including 338 DWG review records and 14 LIN patterns. Original standards and CAD drawings are **not uploaded** to this public repository. The current database is rebuilt locally from the supplied sources. Current tests: **82 passed**. See [current audit](docs/audit-and-rules-2026-10-24.md); the earlier [knowledge coverage report](docs/knowledge-completion-2026-10-24.md) is historical.
 
 Rebuild against your own approved source PDF and the reviewed 338-file catalog:
 
@@ -59,3 +63,12 @@ python -m atgt.qcvn_ingest search --db local-manifests/knowledge/atgt-knowledge.
 ```
 
 **Not certified for automated design:** indexed QCVN evidence and filename-derived CAD code suggestions are distinct from expert-approved rules and geometrically verified DWG blocks.
+
+## Thử lập phương án vạch sơn
+
+```powershell
+python -m atgt.planning_cli --kind edge --input examples/edge-contexts.json --lin "E:\TEMPLATE CV\BINH DO ATGT DU AN MAU\VACH_SON_QCVN41_2024.lin" --output local-manifests/edge-preview.json
+python -m atgt.planning_cli --kind box44 --input examples/box44-contexts.json --output local-manifests/box44-preview.json
+```
+
+Ví dụ là dữ liệu giả định, không phải kết quả thiết kế dự án. Kết quả luôn có `cad_execution_allowed=false`; khoảng thiếu căn cứ có `status=blocked` và lý do. Vạch 4.4 tái sử dụng hàm phân loại từ skill của người dùng, với ngưỡng 5 m/30 m được ghi rõ là thực hành dự án. Đường đôi có dải phân cách cần xử lý theo từng phần xe chạy trước khi dùng quy tắc ô 4.4.

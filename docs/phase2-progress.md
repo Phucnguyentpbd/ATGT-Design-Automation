@@ -9,7 +9,7 @@
 3. `src/atgt/knowledge.py`: kho SQLite có phiên bản, căn cứ và trạng thái `draft/approved/retired`. Không đưa quy tắc `draft` vào thi hành; tự động thiết kế chỉ cho `ordinary` và `divided_rural`.
 4. `data/rules/qcvn41-table2-draft.json`: chép dữ liệu hệ số kích thước biển QCVN 41:2024 Điều 12 Bảng 2 ở trạng thái `draft`, giữ ngoại lệ.
 5. `scripts/scan_atgt_library.ps1`: tiện ích quét thư viện Windows tại đường dẫn do người dùng chỉ định; không sửa/chèn DWG.
-6. Mẫu Excel chính thức do người dùng xác nhận là `Book2(1).xlsx`, SHA-256 `19672f2be596f471afbfeef0294b1831e1c148a14030dcc901f71f39f8d73985`.
+6. Mẫu Excel chính thức do người dùng xác nhận là `Book2.xlsx`, SHA-256 `19672f2be596f471afbfeef0294b1831e1c148a14030dcc901f71f39f8d73985`.
 
 ## Kết quả tài sản đã tiếp nhận
 

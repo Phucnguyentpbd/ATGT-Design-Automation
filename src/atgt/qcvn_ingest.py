@@ -10,8 +10,11 @@ import hashlib
 import json
 import re
 import sqlite3
+from contextlib import closing
+from tempfile import TemporaryDirectory
 from collections import Counter
 from pathlib import Path
+from .linetypes import parse_lin
 
 PDF_SHA = "84825a72c4605b65485f3d31a606525a9bc96c970a5200defc0781496ddbbd46"
 ANNEX = {"A":77,"B":80,"C":98,"D":115,"E":130,"F":151,"G":158,
@@ -47,138 +50,157 @@ def code_normalize(value: str) -> str:
 
 
 def build(pdf_path: Path, out: Path, catalog: Path | None=None, lin: Path | None=None) -> dict:
+    """Publish a complete new index only after extraction and checks succeed.
+
+    SQLite is the authoritative artifact; coverage JSON is a derived report.
+    A failed build leaves the last complete database available to agents.
+    """
+    out = Path(out)
+    out.mkdir(parents=True, exist_ok=True)
+    with TemporaryDirectory(prefix=".build-", dir=out) as work:
+        staging = Path(work)
+        result = _build_unpublished(pdf_path, staging, catalog, lin)
+        (staging / "atgt-knowledge.sqlite").replace(out / "atgt-knowledge.sqlite")
+        (staging / "knowledge-coverage.json").replace(out / "knowledge-coverage.json")
+    return result
+
+
+def _catalog_assets(path: Path) -> list[dict]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data = data.get("sign_assets", data)
+    assets = data.get("assets")
+    if not isinstance(assets, list) or not assets:
+        raise ValueError("Catalog requires asset rows")
+    if data.get("total_dwg", len(assets)) != len(assets):
+        raise ValueError("Catalog count mismatch")
+    seen_ids, seen_paths = set(), set()
+    normalized = []
+    for asset in assets:
+        relative = asset.get("relative_path", asset.get("source_relative_path", "")).replace("\\", "/")
+        identity = asset.get("asset_id")
+        checksum = asset.get("sha256", "")
+        if (not relative or relative.startswith("/") or ":" in relative
+                or ".." in relative.split("/") or not relative.lower().endswith(".dwg")):
+            raise ValueError("Invalid relative DWG path")
+        if not identity or identity in seen_ids or relative.casefold() in seen_paths:
+            raise ValueError("Missing or duplicate catalog identity")
+        if not re.fullmatch(r"[a-fA-F0-9]{64}", checksum):
+            raise ValueError("Invalid DWG fingerprint")
+        seen_ids.add(identity)
+        seen_paths.add(relative.casefold())
+        normalized.append({**asset, "source_relative_path": relative})
+    return normalized
+
+
+def _build_unpublished(pdf_path: Path, out: Path, catalog: Path | None=None, lin: Path | None=None) -> dict:
     try:
         import fitz
     except ImportError as exc:
         raise RuntimeError("PyMuPDF is required: pip install pymupdf") from exc
     if digest(pdf_path)!=PDF_SHA:
         raise ValueError("Wrong QCVN PDF checksum; refusing to mix source versions")
-    doc=fitz.open(pdf_path)
-    if len(doc)!=403: raise ValueError("Expected exactly 403 QCVN pages")
-    pages=[p.get_text(sort=True) for p in doc]
+    with fitz.open(pdf_path) as doc:
+        if len(doc)!=403: raise ValueError("Expected exactly 403 QCVN pages")
+        pages=[p.get_text(sort=True) for p in doc]
     out.mkdir(parents=True,exist_ok=True)
     dbpath=out/"atgt-knowledge.sqlite"
     if dbpath.exists(): dbpath.unlink()
-    db=sqlite3.connect(dbpath)
-    db.executescript("""
-    CREATE TABLE pages(page INTEGER PRIMARY KEY,annex TEXT,text TEXT NOT NULL,requires_visual_review INTEGER);
-    CREATE VIRTUAL TABLE page_fts USING fts5(text,content='pages',content_rowid='page',tokenize='unicode61');
-    CREATE TABLE articles(article INTEGER PRIMARY KEY,title TEXT,start_page INTEGER);
-    CREATE TABLE annexes(label TEXT PRIMARY KEY,start_page INTEGER,end_page INTEGER);
-    CREATE TABLE sign_index(code TEXT PRIMARY KEY,pages_json TEXT NOT NULL,count INTEGER,status TEXT);
-    CREATE TABLE mark_index(code TEXT PRIMARY KEY,pages_json TEXT NOT NULL,count INTEGER,status TEXT);
-    CREATE TABLE cad_assets(asset_id TEXT PRIMARY KEY,source_path TEXT,sha256 TEXT,candidate_codes_json TEXT,status TEXT);
-    CREATE TABLE line_patterns(name TEXT PRIMARY KEY,description TEXT,pattern_json TEXT,source_sha256 TEXT,status TEXT);
-    CREATE TABLE source_clauses(reference TEXT,page INTEGER,excerpt TEXT,status TEXT);
-    CREATE INDEX clause_by_reference ON source_clauses(reference,page);
-    """)
-    arts={}
-    signs={}
-    marks={}
-    clauses=0
-    visual=[]
-    clause_rx=re.compile(r"^\s*(\d{1,2}\.\d{1,2}(?:\.\d{1,2})?)\.\s+(.{15,})$")
-    for n,txt in enumerate(pages,1):
-        short=len(txt.strip())<200
-        if short: visual.append(n)
-        db.execute("INSERT INTO pages VALUES (?,?,?,?)",(n,annex_of(n),txt,int(short)))
-        if n<=76:
-            for m in ARTICLE.finditer(txt):
-                article=int(m[1])
-                if 1<=article<=84 and article not in arts:
-                    arts[article]=(n," ".join(m[2].split())[:160])
-            for line in txt.splitlines():
-                m=clause_rx.match(line)
-                if m:
-                    db.execute("INSERT INTO source_clauses VALUES (?,?,?,?)",
-                               (m[1],n," ".join(m[2].split())[:220],"citation_only"))
-                    clauses+=1
-        for m in SIGN.finditer(txt):
-            key=code_normalize(m[1]); signs.setdefault(key,[]).append(n)
-        if 158<=n<=199:
-            for m in MARK.finditer(txt):
-                key=m[1].lower()
-                key=re.sub(r"\.([a-z])$",r"\1",key)
-                marks.setdefault(key,[]).append(n)
-    if set(arts)!=set(range(1,85)):
-        raise ValueError(f"Article coverage gap: {set(range(1,85))-set(arts)}")
-    db.execute("INSERT INTO page_fts(page_fts) VALUES ('rebuild')")
-    for article,(page,title) in sorted(arts.items()):
-        db.execute("INSERT INTO articles VALUES (?,?,?)",(article,title,page))
-    annex_entries=list(ANNEX.items())
-    for idx,(ann,start) in enumerate(annex_entries):
-        end=annex_entries[idx+1][1]-1 if idx+1<len(annex_entries) else 403
-        db.execute("INSERT INTO annexes VALUES (?,?,?)",(ann,start,end))
-    for code,locs in signs.items():
-        db.execute("INSERT INTO sign_index VALUES (?,?,?,?)",
-                   (code,json.dumps(sorted(set(locs))),len(locs),"source_text_only"))
-    for code,locs in marks.items():
-        db.execute("INSERT INTO mark_index VALUES (?,?,?,?)",
-                   (code,json.dumps(sorted(set(locs))),len(locs),"source_text_only"))
-    grouped=Counter()
-    candidates_single=ambiguous=unmatched=0
-    if catalog is not None:
-        assets=json.loads(catalog.read_text(encoding="utf-8"))
-        if len(assets.get("assets",[]))!=338:
-            raise ValueError("Sign library must contain exactly 338 locked records")
-        if assets.get("source_archive",{}).get("sha256")!="e471f9644250d15084d5ad0fb79543a5bd7aaff03c06a109afc760a68a3a3011":
-            raise ValueError("Sign archive fingerprint mismatch")
-        for asset in assets["assets"]:
-            path=asset["source_relative_path"]
-            grouped[path.split("/")[0]]+=1
-            stem=Path(path).stem
-            variants=[]
-            if re.fullmatch(r"\d{2,3}[a-z]?",stem,re.I):
-                variants=sorted(s for s in signs if re.fullmatch(r"(?:dp|ie|p|w|r|i|s)\."+stem,s,re.I))
-            elif re.fullmatch(r"[EGH]\d{1,2}[a-z]?",stem,re.I):
-                family,num=stem[0].upper(),stem[1:]
-                prefix="R" if family=="E" else "S"
-                wanted=code_normalize(f"{prefix}.{family},{num}")
-                variants=[wanted] if wanted in signs else []
-            if stem=="510": variants=sorted(s for s in signs if s.startswith("S.510"))
-            if len(variants)==1: candidates_single+=1
-            elif len(variants)>1: ambiguous+=1
-            else: unmatched+=1
-            db.execute("INSERT INTO cad_assets VALUES (?,?,?,?,?)",
-                       (asset["asset_id"],path,asset["sha256"],json.dumps(variants),"unverified"))
-    lin_count=0
-    if lin is not None:
-        blob=lin.read_bytes()
-        try: raw=blob.decode("utf-8-sig")
-        except UnicodeDecodeError: raw=blob.decode("cp1252")
-        lin_sha=digest(lin)
-        pending=None
-        for raw_line in raw.splitlines():
-            row=raw_line.strip()
-            if not row or row.startswith(";"): continue
-            if row.startswith("*"):
-                if pending is not None: raise ValueError("Missing LIN pattern definition")
-                pending=row[1:].split(",",1)
-                if len(pending)!=2: raise ValueError("Malformed LIN heading")
-                continue
-            if pending is None: raise ValueError("Orphan LIN stroke")
-            fields=row.split(",")
-            if fields[0].strip().upper()!="A":
-                raise ValueError("Only simple LIN definitions are currently supported")
-            try: strokes=[float(x) for x in fields[1:]]
-            except ValueError as exc: raise ValueError("Complex LIN pattern requires inspection") from exc
-            db.execute("INSERT INTO line_patterns VALUES (?,?,?,?,?)",
-                       (pending[0].strip(),pending[1].strip(),json.dumps(strokes),lin_sha,"unverified"))
-            lin_count+=1
-            pending=None
-        if pending is not None: raise ValueError("Incomplete LIN file")
-    db.commit()
-    results={"qcvn_pdf_sha256":PDF_SHA,"pages":403,"articles":len(arts),"annexes":len(ANNEX),
-             "source_sign_codes":len(signs),"source_mark_codes":len(marks),
-             "clause_anchors":clauses,"needs_visual_review_pages":visual,
-             "dwg_count":sum(grouped.values()),"dwg_groups":dict(grouped),
-             "linetype_patterns":lin_count,
-             "suggested_single":candidates_single,"suggested_ambiguous":ambiguous,
-             "unmatched":unmatched,"approved_cad_rules":0,
-             "caution":"All rule/sign asset mappings remain unverified; no automated CAD write is authorised"}
-    (out/"knowledge-coverage.json").write_text(json.dumps(results,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    db.close()
-    return results
+    with closing(sqlite3.connect(dbpath)) as db:
+        db.executescript("""
+        CREATE TABLE pages(page INTEGER PRIMARY KEY,annex TEXT,text TEXT NOT NULL,requires_visual_review INTEGER);
+        CREATE VIRTUAL TABLE page_fts USING fts5(text,content='pages',content_rowid='page',tokenize='unicode61');
+        CREATE TABLE articles(article INTEGER PRIMARY KEY,title TEXT,start_page INTEGER);
+        CREATE TABLE annexes(label TEXT PRIMARY KEY,start_page INTEGER,end_page INTEGER);
+        CREATE TABLE sign_index(code TEXT PRIMARY KEY,pages_json TEXT NOT NULL,count INTEGER,status TEXT);
+        CREATE TABLE mark_index(code TEXT PRIMARY KEY,pages_json TEXT NOT NULL,count INTEGER,status TEXT);
+        CREATE TABLE cad_assets(asset_id TEXT PRIMARY KEY,source_path TEXT,sha256 TEXT,candidate_codes_json TEXT,status TEXT);
+        CREATE TABLE line_patterns(name TEXT PRIMARY KEY,description TEXT,pattern_json TEXT,source_sha256 TEXT,status TEXT);
+        CREATE TABLE source_clauses(reference TEXT,page INTEGER,excerpt TEXT,status TEXT);
+        CREATE INDEX clause_by_reference ON source_clauses(reference,page);
+        """)
+        arts={}
+        signs={}
+        marks={}
+        clauses=0
+        visual=[]
+        clause_rx=re.compile(r"^\s*(\d{1,2}\.\d{1,2}(?:\.\d{1,2})?)\.\s+(.{15,})$")
+        for n,txt in enumerate(pages,1):
+            short=len(txt.strip())<200
+            if short: visual.append(n)
+            db.execute("INSERT INTO pages VALUES (?,?,?,?)",(n,annex_of(n),txt,int(short)))
+            if n<=76:
+                for m in ARTICLE.finditer(txt):
+                    article=int(m[1])
+                    if 1<=article<=84 and article not in arts:
+                        arts[article]=(n," ".join(m[2].split())[:160])
+                for line in txt.splitlines():
+                    m=clause_rx.match(line)
+                    if m:
+                        db.execute("INSERT INTO source_clauses VALUES (?,?,?,?)",
+                                   (m[1],n," ".join(m[2].split())[:220],"citation_only"))
+                        clauses+=1
+            for m in SIGN.finditer(txt):
+                key=code_normalize(m[1]); signs.setdefault(key,[]).append(n)
+            if 158<=n<=199:
+                for m in MARK.finditer(txt):
+                    key=m[1].lower()
+                    key=re.sub(r"\.([a-z])$",r"\1",key)
+                    marks.setdefault(key,[]).append(n)
+        if set(arts)!=set(range(1,85)):
+            raise ValueError(f"Article coverage gap: {set(range(1,85))-set(arts)}")
+        db.execute("INSERT INTO page_fts(page_fts) VALUES ('rebuild')")
+        for article,(page,title) in sorted(arts.items()):
+            db.execute("INSERT INTO articles VALUES (?,?,?)",(article,title,page))
+        annex_entries=list(ANNEX.items())
+        for idx,(ann,start) in enumerate(annex_entries):
+            end=annex_entries[idx+1][1]-1 if idx+1<len(annex_entries) else 403
+            db.execute("INSERT INTO annexes VALUES (?,?,?)",(ann,start,end))
+        for code,locs in signs.items():
+            db.execute("INSERT INTO sign_index VALUES (?,?,?,?)",
+                       (code,json.dumps(sorted(set(locs))),len(locs),"source_text_only"))
+        for code,locs in marks.items():
+            db.execute("INSERT INTO mark_index VALUES (?,?,?,?)",
+                       (code,json.dumps(sorted(set(locs))),len(locs),"source_text_only"))
+        grouped=Counter()
+        candidates_single=ambiguous=unmatched=0
+        if catalog is not None:
+            for asset in _catalog_assets(catalog):
+                path=asset["source_relative_path"]
+                grouped[path.split("/")[0]]+=1
+                stem=Path(path).stem
+                variants=[]
+                if re.fullmatch(r"\d{2,3}[a-z]?",stem,re.I):
+                    variants=sorted(s for s in signs if re.fullmatch(r"(?:dp|ie|p|w|r|i|s)\."+stem,s,re.I))
+                elif re.fullmatch(r"[EGH]\d{1,2}[a-z]?",stem,re.I):
+                    family,num=stem[0].upper(),stem[1:]
+                    prefix="R" if family=="E" else "S"
+                    wanted=code_normalize(f"{prefix}.{family},{num}")
+                    variants=[wanted] if wanted in signs else []
+                if stem=="510": variants=sorted(s for s in signs if s.startswith("S.510"))
+                if len(variants)==1: candidates_single+=1
+                elif len(variants)>1: ambiguous+=1
+                else: unmatched+=1
+                db.execute("INSERT INTO cad_assets VALUES (?,?,?,?,?)",
+                           (asset["asset_id"],path,asset["sha256"],json.dumps(variants),"unverified"))
+        lin_count=0
+        if lin is not None:
+            for pattern in parse_lin(lin):
+                db.execute("INSERT INTO line_patterns VALUES (?,?,?,?,?)",
+                           (pattern.name, pattern.description, json.dumps([str(x) for x in pattern.elements_m]),
+                            pattern.source_sha256, "unverified"))
+                lin_count+=1
+        db.commit()
+        results={"qcvn_pdf_sha256":PDF_SHA,"pages":403,"articles":len(arts),"annexes":len(ANNEX),
+                 "source_sign_codes":len(signs),"source_mark_codes":len(marks),
+                 "clause_anchors":clauses,"needs_visual_review_pages":visual,
+                 "dwg_count":sum(grouped.values()),"dwg_groups":dict(grouped),
+                 "linetype_patterns":lin_count,
+                 "suggested_single":candidates_single,"suggested_ambiguous":ambiguous,
+                 "unmatched":unmatched,"approved_cad_rules":0,
+                 "caution":"All rule/sign asset mappings remain unverified; no automated CAD write is authorised"}
+        (out/"knowledge-coverage.json").write_text(json.dumps(results,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+        db.close()
+        return results
 
 
 def lookup(dbfile: Path, text: str, limit: int=10) -> list[dict]:
