@@ -12,7 +12,7 @@ from xml.etree import ElementTree as ET
 from zipfile import ZipFile, is_zipfile
 
 EXPECTED_PDF = "84825a72c4605b65485f3d31a606525a9bc96c970a5200defc0781496ddbbd46"
-EXPECTED_XLSX = "97f12717b4479187e93e8889da0ddaf8098dc471609f7f52d94abf849db0b43d"
+EXPECTED_XLSX = "19672f2be596f471afbfeef0294b1831e1c148a14030dcc901f71f39f8d73985"
 MAIN_NS = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
 
 
