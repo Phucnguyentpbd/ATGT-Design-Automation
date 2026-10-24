@@ -59,3 +59,17 @@ def test_knowledge_requires_explicit_approval(tmp_path):
     with pytest.raises(ValueError):
         db.add_draft("TABLE2-GROUP", 1, "a" * 64, "overwrite", ("ordinary",), {})
     db.close()
+
+
+def test_draft_json_import_stays_non_executable(tmp_path):
+    from atgt.rule_import_cli import import_draft
+    draft = tmp_path / "draft.json"
+    draft.write_text('{"status":"draft", "rule_id":"R", "version":1, '
+                     '"source_sha256":"' + 'f'*64 + '", "citation":"p14", '
+                     '"road_types":["ordinary"], "payload":{"size":"1.25"}}')
+    db_path = tmp_path / "db.sqlite"
+    import_draft(draft, db_path)
+    store = RuleStore(db_path)
+    assert store.get("R", 1).status == "draft"
+    assert store.executable("ordinary") == []
+    store.close()
