@@ -12,7 +12,7 @@ Phạm vi đầu: **đường ô tô thông thường và đường đôi ngoài
 
 Nguồn quy chuẩn chính được thay bằng [QCVN_41_2024_mo_khoa.pdf](</D:/DOCUMENT/TCVN/TIEU CHUAN TK ATGT/QCVN_41_2024_mo_khoa.pdf>), 403 trang PDF, bìa ghi QCVN 41:2024/BGTVT. SHA-256: `84825A72C4605B65485F3D31A606525A9BC96C970A5200DEFC0781496DDBBD46`.
 
-Nguồn biểu mẫu: [Book2.xlsx](/C:/Users/PHUC/Desktop/Book2.xlsx). SHA-256: `97F12717B4479187E93E8889DA0DDAF8098DC471609F7F52D94ABF849DB0B43D`.
+Nguồn biểu mẫu: `Book2(1).xlsx` (người dùng xác nhận mẫu chính thức ngày 24/10/2026). SHA-256: `97F12717B4479187E93E8889DA0DDAF8098DC471609F7F52D94ABF849DB0B43D`.
 
 Thư viện biển báo được người dùng chọn: [AtgtPro/Library](</D:/DOCUMENT/TAI LIEU AUTOCAD/Tool CAD/lispCAD/0. Hay dung/AtgtPro/Library>). Đây là nguồn tài sản chính thay cho thư viện ứng viên đã phát hiện trước đó. Kiểm kê chỉ đọc ngày 24/10/2026 có 338 file DWG, tổng 69.791.520 byte, gồm:
 
@@ -99,7 +99,7 @@ Skill ATGT hướng dẫn phương pháp và trách nhiệm. Các agent tra cứ
 
 ### 4.1. Bố cục nguồn đã khảo sát
 
-Workbook có ba sheet: `KL VACH SON`, `THONG KE BIEN BAO ATGT` và `Sheet1` đang trống. Hai sheet đầu là biểu mẫu nghiệp vụ. Không dùng số liệu dự án cũ làm khối lượng của dự án mới.
+Workbook phiên bản đã xác nhận có **hai** sheet: `KL VACH SON`, `THONG KE BIEN BAO ATGT` . Hai sheet đầu là biểu mẫu nghiệp vụ. Không dùng số liệu dự án cũ làm khối lượng của dự án mới.
 
 | Vùng mẫu | Vai trò |
 |---|---|
@@ -221,3 +221,12 @@ Hoàn thành một lượt khi mọi đối tượng tự bố trí có căn c�
 Đã xác nhận PDF mới 403 trang, trực quan Bảng 2 và khoản 3.10; đã đọc các sheet, ô gộp, nhóm hạng mục, công thức, liên kết ngoài, vùng in và lỗi tham chiếu của workbook mẫu; đã kiểm kê 338 DWG trong thư viện biển báo do người dùng chọn. Chỉ tạo/cập nhật tài liệu kế hoạch này; chưa sửa PDF/XLSX/DWG nguồn và chưa gửi lệnh thao tác Civil.
 
 Cần dữ liệu khi bắt đầu triển khai: thư viện vạch sơn/quy cách tài sản vạch, bình đồ tuyến thử, các hồ sơ ATGT mẫu và thông tin dự án. Thư viện biển báo đã được chọn, còn cần kiểm định nội dung từng DWG. Chưa có bình đồ nguồn cho lượt này nên không lập số lượng dự án mới hoặc coi các số trong Excel mẫu là kết quả thiết kế.
+
+
+## Bổ sung hồ sơ nguồn ngày 24/10/2026
+
+- Người dùng xác nhận **`Book2(1).xlsx`** là mẫu Excel chính thức để triển khai, SHA-256: `19672f2be596f471afbfeef0294b1831e1c148a14030dcc901f71f39f8d73985`. Các SHA trong khảo sát cũ được thay thế bởi khóa này; không tự ý nhập số liệu dự án cũ từ mẫu.
+- Tiếp nhận bản DWG mẫu vạch sơn (SHA-256: `62662e912b2e2756418b68e723ef0a1ade8a3391acc92963580b668c9ae16080`) và tệp linetype `.lin` (SHA-256: `e4484f094b128c53914b91b1c88bfc6b8b6263452a6767c1346f8427a3b15c99`).
+- Tệp `.lin` có 14 định nghĩa kiểu nét, tự khai báo đơn vị mét và nhắc cả QCVN 41:2019/BGTVT và QCVN 41:2024/BGTVT. Đây là tài sản **chờ kiểm định chuyên môn**, không mặc định tất cả kiểu nét đúng quy chuẩn 2024.
+- DWG mẫu thuộc phiên bản AC1021; đơn vị thực tế, hình học và tính phù hợp chưa được đọc lại trong Civil 3D. Không xuất khối lượng dự án từ các mẫu này.
+- Bản kế hoạch vẫn cần 338 DWG biển báo và hồ sơ chuẩn dự án để kiểm định.
