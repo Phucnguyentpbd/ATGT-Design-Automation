@@ -107,8 +107,9 @@ def _build_unpublished(pdf_path: Path, out: Path, catalog: Path | None=None, lin
     if dbpath.exists(): dbpath.unlink()
     with closing(sqlite3.connect(dbpath)) as db:
         db.executescript("""
+        CREATE TABLE metadata(key TEXT PRIMARY KEY,value TEXT NOT NULL);
         CREATE TABLE pages(page INTEGER PRIMARY KEY,annex TEXT,text TEXT NOT NULL,requires_visual_review INTEGER);
-        CREATE VIRTUAL TABLE page_fts USING fts5(text,content='pages',content_rowid='page',tokenize='unicode61');
+        CREATE VIRTUAL TABLE page_fts USING fts5(text,content='pages',content_rowid='page',tokenize='unicode61 remove_diacritics 2');
         CREATE TABLE articles(article INTEGER PRIMARY KEY,title TEXT,start_page INTEGER);
         CREATE TABLE annexes(label TEXT PRIMARY KEY,start_page INTEGER,end_page INTEGER);
         CREATE TABLE sign_index(code TEXT PRIMARY KEY,pages_json TEXT NOT NULL,count INTEGER,status TEXT);
@@ -118,6 +119,8 @@ def _build_unpublished(pdf_path: Path, out: Path, catalog: Path | None=None, lin
         CREATE TABLE source_clauses(reference TEXT,page INTEGER,excerpt TEXT,status TEXT);
         CREATE INDEX clause_by_reference ON source_clauses(reference,page);
         """)
+        db.executemany("INSERT INTO metadata VALUES (?,?)", [
+            ("schema_version", "1"), ("qcvn_pdf_sha256", PDF_SHA)])
         arts={}
         signs={}
         marks={}

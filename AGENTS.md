@@ -12,4 +12,5 @@
 - Full sign codes are required (`P.102`, `DP.135`, etc.). Quantity keys exclude poles. Preserve user-entered pole classification on Excel updates.
 - Book2 export is implemented in `scripts/export_book2.py`; read `docs/book2-export.md` before changing its ledger or workbook contract. A verified flag is an upstream evidence contract, not independent proof that Civil was queried. Never report the synthetic example as project quantities.
 - Keep PDF, DWG, LIN, XLSX, SQLite and detailed project evidence out of public Git. `local-manifests/` is ignored.
-- Validation: `python -m pip install -e ".[knowledge]" pytest`, then `python -m pytest -q`. New regression tests must fail before the repair for the intended reason. Python tests are not live Civil/Excel acceptance.
+- MCP is read-only and source-bound. Read `docs/mcp-integration.md`; no tool may approve rules, write CAD or accept arbitrary filesystem paths. MCP client success does not prove the user's Orca/Antigravity session loaded it.
+- Validation: `python -m pip install -e ".[knowledge,mcp]" pytest`, then `python -m pytest -q`. New regression tests must fail before the repair for the intended reason. Python tests are not live Civil/Excel acceptance.

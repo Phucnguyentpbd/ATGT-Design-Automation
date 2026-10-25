@@ -8,6 +8,10 @@ description = "Traceable ATGT road-sign planning and quantity-ledger core"
 requires-python = ">=3.10"
 [project.optional-dependencies]
 knowledge = ["PyMuPDF>=1.22"]
+mcp = ["mcp>=1.28.1,<2"]
+
+[project.scripts]
+atgt-mcp = "atgt.mcp_server:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

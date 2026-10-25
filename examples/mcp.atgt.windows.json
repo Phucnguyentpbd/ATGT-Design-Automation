@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "atgt": {
+      "command": "D:\\AGENT_AI\\ATGT-Design-Automation\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m", "atgt.mcp_server",
+        "--db", "D:\\AGENT_AI\\ATGT-Design-Automation\\local-manifests\\knowledge\\atgt-knowledge.sqlite",
+        "--lin", "E:\\TEMPLATE CV\\BINH DO ATGT DU AN MAU\\VACH_SON_QCVN41_2024.lin"
+      ],
+      "env": {"PYTHONUTF8": "1"}
+    }
+  }
+}
