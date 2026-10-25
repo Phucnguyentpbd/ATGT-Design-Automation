@@ -23,7 +23,7 @@
 | Bộ ghi Civil | Phương án đã kiểm tra, đúng bản vẽ và snapshot | Đối tượng có mã sở hữu; trạng thái ghi/đọc lại, không xóa toàn layer |
 | Agent thống kê | Đối tượng đã đọc lại + ledger | Bản sao Excel theo mẫu, loại cột biển do người dùng nhập |
 
-Hiện các hàm Python và CLI có thể dùng để tra cứu/lập phương án. Adapter MCP, bộ đọc ngữ nghĩa bình đồ, bộ ghi và xuất Excel là các bước triển khai tiếp; không mô tả chúng là đã chạy.
+Hiện các hàm Python và CLI có thể dùng để tra cứu/lập phương án và [xuất Book2 từ ledger đã xác minh](book2-export.md). Bộ xuất đã thử với dữ liệu giả định trong Excel thật. Adapter MCP, bộ đọc ngữ nghĩa bình đồ và bộ ghi Civil là các bước triển khai tiếp; không mô tả chúng là đã chạy. Agent thống kê chỉ nhận ledger từ bước đọc lại/đo bóc, không tự đặt `verified` cho một phương án thiết kế.
 
 ## Thông tin không được tự suy ra
 

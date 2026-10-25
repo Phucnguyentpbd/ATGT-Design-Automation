@@ -10,5 +10,6 @@
 - One writer per drawing. Verify the connected drawing's full identity and units. Preserve source drawings; use a distinct work copy. Do not retry a timed-out CAD write or save an active source DWG.
 - Use native Curve/Alignment geometry. Curve distance, displayed chainage and the length of an offset marking are different quantities. Do not approximate curves using straight chords between sparse vertices.
 - Full sign codes are required (`P.102`, `DP.135`, etc.). Quantity keys exclude poles. Preserve user-entered pole classification on Excel updates.
+- Book2 export is implemented in `scripts/export_book2.py`; read `docs/book2-export.md` before changing its ledger or workbook contract. A verified flag is an upstream evidence contract, not independent proof that Civil was queried. Never report the synthetic example as project quantities.
 - Keep PDF, DWG, LIN, XLSX, SQLite and detailed project evidence out of public Git. `local-manifests/` is ignored.
 - Validation: `python -m pip install -e ".[knowledge]" pytest`, then `python -m pytest -q`. New regression tests must fail before the repair for the intended reason. Python tests are not live Civil/Excel acceptance.

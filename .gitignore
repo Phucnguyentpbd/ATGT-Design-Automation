@@ -11,6 +11,7 @@ __pycache__/
 *.xls
 local-sources/
 output/
+outputs/
 
 # Keep user CAD standards and inspection products local
 *.lin
