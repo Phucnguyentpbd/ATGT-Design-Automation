@@ -45,6 +45,31 @@ Lệnh trên là tiến trình chờ host MCP gửi yêu cầu; không in menu g
 
 Orca có thể điều phối agent dùng MCP này thông qua cấu hình MCP của agent. Việc client SDK kết nối thành công không chứng minh phiên Orca/Antigravity đang chạy đã nhận cấu hình mới; cần làm mới danh sách công cụ hoặc mở phiên agent mới theo cơ chế của host. Không khởi động thêm agent chỉ để tuyên bố đã triển khai.
 
+### Antigravity CLI, OpenCode và Codex trong Orca
+
+Đã gắn cùng mục `atgt` trên máy triển khai ngày 25/10/2026:
+
+| Host | Cấu hình dùng trên máy hiện tại | Bằng chứng |
+|---|---|---|
+| Antigravity CLI | `%USERPROFILE%\.gemini\config\mcp_config.json` | `agy mcp list` nhận `atgt`, trạng thái enabled |
+| OpenCode | `%USERPROFILE%\.config\opencode\opencode.jsonc` | `opencode debug config` nhận đúng cấu hình; `opencode mcp list` báo connected |
+| Codex | `%USERPROFILE%\.codex\config.toml` | `codex mcp get atgt --json` nhận đúng mục stdio, enabled |
+| Codex runtime của Orca | `%APPDATA%\orca\codex-runtime-home\home\config.toml` | Chạy `codex mcp get atgt --json` với đúng `CODEX_HOME` cũng nhận mục này |
+
+Các đường dẫn trên đã được kiểm tra ở máy triển khai, không phải quy ước áp dụng cho mọi phiên bản Orca. Orca hiện không có lệnh ghi đè chương trình hoặc biến môi trường riêng cho ba agent này. Nếu sau này chuyển profile hoặc tài khoản được Orca quản lý, cần xác nhận lại cấu hình thực sự được nạp.
+
+Đã sao lưu từng file trước khi sửa và giữ cấu hình các MCP có sẵn. Antigravity có UTF-8 BOM làm `agy mcp list` không phân tích được JSON; đã bỏ BOM và kiểm tra lại. Với OpenCode, mục local dùng `command` là một mảng gồm chương trình và các đối số, `environment` cho biến môi trường, `enabled: true`, `timeout: 20000`; không chép nguyên cấu trúc `mcpServers` vào OpenCode. Với Codex, dùng lệnh native `codex mcp add` để ghi TOML.
+
+Client SDK đã khởi chạy server từ từng bản cấu hình thực tế, ở thư mục ngoài repo và không thêm `PYTHONPATH`: cả bốn đường cấu hình nhận đủ sáu công cụ, gọi được `atgt_status` và tìm `P.102`, cùng trả về 403 trang, 84 điều, 338 tài sản và 14 mẫu nét. Kiểm tra OpenCode chỉ bật ATGT trong tiến trình chẩn đoán bằng cấu hình tạm thời; các MCP khác trong file cấu hình vẫn giữ nguyên.
+
+Phép kiểm tra Codex app-server dùng runtime Orca hết thời gian sau 30 giây; nhật ký đồng thời ghi lỗi 401 ở các yêu cầu tài khoản/plugin/model. Đã dừng tiến trình kiểm tra và không thay đăng nhập. Chưa chứng minh đây là nguyên nhân của timeout, cũng chưa coi đó là lỗi ATGT. Orca đang đóng khi kiểm tra; chưa có nghiệm thu phiên agent trong UI. Không có lượt gọi model hay thao tác Civil nào trong đợt gắn cấu hình này.
+
+Khi mở lại Orca, mở phiên agent mới tại repo này để nhận cấu hình. Nhiệm vụ đầu tiên có thể dùng:
+
+> Dùng MCP atgt gọi atgt_status, tìm P.102 và lấy căn cứ vạch 3.1a/3.1b. Báo rõ nguồn và phần còn thiếu dữ liệu; chưa thực thi CAD.
+
+Bằng chứng và đường dẫn bản sao lưu được giữ cục bộ trong `local-manifests/mcp/deployment.json`, `client-bindings-evidence.json` và `native-host-evidence.json`; không đưa cấu hình tài khoản lên Git.
+
 ## Luồng gọi cho agent
 
 1. `atgt_status`: giữ mã nguồn và kiểm tra đúng phạm vi.
