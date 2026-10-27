@@ -1,0 +1,34 @@
+{
+  "corridors": [
+    {
+      "snapshot_id": "synthetic-junction-snapshot",
+      "alignment_id": "SYNTHETIC-T1",
+      "road_type": "ordinary",
+      "travel_direction": "increasing",
+      "design_speed_kmh": 60,
+      "alignment_start_m": 0,
+      "alignment_end_m": 1000,
+      "qcvn_search_evidence": "Synthetic example: QCVN pages 25, 100, 101 and 151 reviewed",
+      "junctions": [
+        {
+          "junction_id": "J1",
+          "station_m": 300,
+          "priority_relationship": "side_road_non_priority",
+          "candidate_sign_code": "W.207b",
+          "branch_side": "right",
+          "geometry_evidence": "Synthetic reviewed right-side branch",
+          "priority_evidence": "Synthetic approved priority plan"
+        },
+        {
+          "junction_id": "J2",
+          "station_m": 350,
+          "priority_relationship": "side_road_non_priority",
+          "candidate_sign_code": "W.207c",
+          "branch_side": "left",
+          "geometry_evidence": "Synthetic reviewed left-side branch",
+          "priority_evidence": "Synthetic approved priority plan"
+        }
+      ]
+    }
+  ]
+}

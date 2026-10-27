@@ -53,6 +53,6 @@ Use the private downloadable Knowledge archive supplied in this conversation for
 1. A compatible CAD tool must still inspect the geometry, dimensions, insertion points, units, rotations, layers and attributes of the 338 original DWGs.
 2. Source figure/table parameters and all 19 executable-rule candidates need specialist technical review; the rule store must remain fail-closed pending approval.
 3. Civil 3D placement and physical takeoff must be independently verified against the actual input DWG and approved design documents.
-4. The workbook template is user-approved (`Book2(1).xlsx`) but no new project quantities may be inferred from its example contents.
+4. The workbook template is user-approved (`Book2.xlsx`) but no new project quantities may be inferred from its example contents.
 
 **Current release status:** full-text knowledge-indexing package completed; engineering rule certification and automated CAD production remain pending independent validation.

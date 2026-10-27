@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "atgt-cad": {
+      "command": "D:\\AGENT_AI\\ATGT-Design-Automation\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m", "atgt.cad_mcp_server",
+        "--expected-source", "E:\\TEMPLATE CV\\BINH DO ATGT DU AN MAU\\BD TK ATGT TAY VAN CANH.dwg",
+        "--output-root", "D:\\AGENT_AI\\ATGT-Design-Automation\\outputs\\cad",
+        "--marking-template", "E:\\TEMPLATE CV\\BINH DO ATGT DU AN MAU\\TEMPLATE_VACH_SON_ATGT_QCVN41_2024.dwg",
+        "--sign-library", "D:\\DOCUMENT\\TAI LIEU AUTOCAD\\Tool CAD\\lispCAD\\0. Hay dung\\AtgtPro\\Library",
+        "--asset-catalog", "D:\\AGENT_AI\\ATGT-Design-Automation\\local-manifests\\assets\\atgt-asset-catalog.json",
+        "--host", "127.0.0.1",
+        "--port", "8070",
+        "--command-timeout", "30"
+      ],
+      "env": {"PYTHONUTF8": "1"}
+    }
+  }
+}

@@ -1,0 +1,744 @@
+{
+  "schema_version": 1,
+  "data_kind": "synthetic",
+  "project": {
+    "id": "ATGT-DEMO",
+    "title": "KIỂM THỬ BỘ XUẤT ATGT — DỮ LIỆU GIẢ ĐỊNH",
+    "subtitle": "Không phải khối lượng thiết kế dự án"
+  },
+  "snapshot": {
+    "id": "SYNTHETIC-READBACK-001",
+    "readback_verified": true,
+    "evidence": "Simulated export test readback only"
+  },
+  "sign_coverage_complete": true,
+  "segments": [
+    {
+      "id": "S1",
+      "alignment_id": "T1",
+      "start_m": "0",
+      "end_m": "1000",
+      "label": "KM0 – KM1"
+    },
+    {
+      "id": "S2",
+      "alignment_id": "T1",
+      "start_m": "1000",
+      "end_m": "2000",
+      "label": "KM1 – KM2"
+    },
+    {
+      "id": "S3",
+      "alignment_id": "T1",
+      "start_m": "2000",
+      "end_m": "3000",
+      "label": "KM2 – KM3"
+    }
+  ],
+  "coverage": [
+    {
+      "segment_id": "S1",
+      "item_code": "1.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "1.2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "1.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "2.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "3.1a",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "3.1b",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "4.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "4.2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "4.4",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "5.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "7.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "7.2_mau2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "7.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "7.6",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "9.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "speed_reducer",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "speed_reducer",
+      "thickness_mm": "6",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "reflective_stud",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "impact_barrel",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "flexible_delineator",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "movable_island",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S1",
+      "item_code": "pedestrian_paving",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "1.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "1.2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "1.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "2.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "3.1a",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "3.1b",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "4.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "4.2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "4.4",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "5.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "7.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "7.2_mau2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "7.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "7.6",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "9.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "speed_reducer",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "speed_reducer",
+      "thickness_mm": "6",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "reflective_stud",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "impact_barrel",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "flexible_delineator",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "movable_island",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S2",
+      "item_code": "pedestrian_paving",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "1.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "1.2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "1.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "2.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "3.1a",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "3.1b",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "4.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "4.2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "4.4",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "5.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "7.1",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "7.2_mau2",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "7.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "7.6",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "9.3",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "speed_reducer",
+      "thickness_mm": "2",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "speed_reducer",
+      "thickness_mm": "6",
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "reflective_stud",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "impact_barrel",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "flexible_delineator",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "movable_island",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    },
+    {
+      "segment_id": "S3",
+      "item_code": "pedestrian_paving",
+      "thickness_mm": null,
+      "complete": true,
+      "evidence": "Synthetic complete survey; absent items zero"
+    }
+  ],
+  "quantities": [
+    {
+      "measurement_id": "M-1-3.1a",
+      "object_id": "O-1-3.1a",
+      "segment_id": "S1",
+      "item_code": "3.1a",
+      "thickness_mm": "2",
+      "quantity": "200",
+      "unit": "m2",
+      "measurement_method": "actual_painted_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    },
+    {
+      "measurement_id": "M-1-3.1b",
+      "object_id": "O-1-3.1b",
+      "segment_id": "S1",
+      "item_code": "3.1b",
+      "thickness_mm": "2",
+      "quantity": "13.2",
+      "unit": "m2",
+      "measurement_method": "actual_painted_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    },
+    {
+      "measurement_id": "M-1-4.4",
+      "object_id": "O-1-4.4",
+      "segment_id": "S1",
+      "item_code": "4.4",
+      "thickness_mm": "2",
+      "quantity": "7.2",
+      "unit": "m2",
+      "measurement_method": "paint_union_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    },
+    {
+      "measurement_id": "M-2-3.1a",
+      "object_id": "O-2-3.1a",
+      "segment_id": "S2",
+      "item_code": "3.1a",
+      "thickness_mm": "2",
+      "quantity": "160",
+      "unit": "m2",
+      "measurement_method": "actual_painted_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    },
+    {
+      "measurement_id": "M-2-3.1b",
+      "object_id": "O-2-3.1b",
+      "segment_id": "S2",
+      "item_code": "3.1b",
+      "thickness_mm": "2",
+      "quantity": "9.6",
+      "unit": "m2",
+      "measurement_method": "actual_painted_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    },
+    {
+      "measurement_id": "M-2-4.4",
+      "object_id": "O-2-4.4",
+      "segment_id": "S2",
+      "item_code": "4.4",
+      "thickness_mm": "2",
+      "quantity": "6.4",
+      "unit": "m2",
+      "measurement_method": "paint_union_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    },
+    {
+      "measurement_id": "M-3-3.1a",
+      "object_id": "O-3-3.1a",
+      "segment_id": "S3",
+      "item_code": "3.1a",
+      "thickness_mm": "2",
+      "quantity": "140",
+      "unit": "m2",
+      "measurement_method": "actual_painted_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    },
+    {
+      "measurement_id": "M-3-3.1b",
+      "object_id": "O-3-3.1b",
+      "segment_id": "S3",
+      "item_code": "3.1b",
+      "thickness_mm": "2",
+      "quantity": "6",
+      "unit": "m2",
+      "measurement_method": "actual_painted_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    },
+    {
+      "measurement_id": "M-3-4.4",
+      "object_id": "O-3-4.4",
+      "segment_id": "S3",
+      "item_code": "4.4",
+      "thickness_mm": "2",
+      "quantity": "0",
+      "unit": "m2",
+      "measurement_method": "paint_union_area",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "evidence": "Synthetic measured-area test fixture"
+    }
+  ],
+  "clusters": [
+    {
+      "cluster_id": "C1",
+      "alignment_id": "T1",
+      "alignment_label": "Tuyến minh họa",
+      "station_m": "100",
+      "side": "right"
+    },
+    {
+      "cluster_id": "C2",
+      "alignment_id": "T1",
+      "alignment_label": "Tuyến minh họa",
+      "station_m": "1100",
+      "side": "left"
+    },
+    {
+      "cluster_id": "C3",
+      "alignment_id": "T1",
+      "alignment_label": "Tuyến minh họa",
+      "station_m": "2100",
+      "side": "right"
+    }
+  ],
+  "faces": [
+    {
+      "face_id": "F1",
+      "cluster_id": "C1",
+      "sign_code": "P.102",
+      "shape": "circle",
+      "width_mm": "700",
+      "height_mm": "700",
+      "work": "install",
+      "asset_id": "SYNTHETIC-ASSET-1",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "reference": "Synthetic asset fixture",
+      "evidence": "Synthetic readback; no real CAD approval"
+    },
+    {
+      "face_id": "F2",
+      "cluster_id": "C1",
+      "sign_code": "W.207a",
+      "shape": "triangle",
+      "width_mm": "900",
+      "height_mm": "900",
+      "work": "install",
+      "asset_id": "SYNTHETIC-ASSET-2",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "reference": "Synthetic asset fixture",
+      "evidence": "Synthetic readback; no real CAD approval"
+    },
+    {
+      "face_id": "F3",
+      "cluster_id": "C1",
+      "sign_code": "S.501",
+      "shape": "rectangle",
+      "width_mm": "900",
+      "height_mm": "400",
+      "work": "install",
+      "asset_id": "SYNTHETIC-ASSET-3",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "reference": "Synthetic asset fixture",
+      "evidence": "Synthetic readback; no real CAD approval"
+    },
+    {
+      "face_id": "F4",
+      "cluster_id": "C1",
+      "sign_code": "P.102",
+      "shape": "circle",
+      "width_mm": "900",
+      "height_mm": "900",
+      "work": "install",
+      "asset_id": "SYNTHETIC-ASSET-4",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "reference": "Synthetic asset fixture",
+      "evidence": "Synthetic readback; no real CAD approval"
+    },
+    {
+      "face_id": "F5",
+      "cluster_id": "C2",
+      "sign_code": "P.102",
+      "shape": "circle",
+      "width_mm": "700",
+      "height_mm": "700",
+      "work": "install",
+      "asset_id": "SYNTHETIC-ASSET-5",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "reference": "Synthetic asset fixture",
+      "evidence": "Synthetic readback; no real CAD approval"
+    },
+    {
+      "face_id": "F6",
+      "cluster_id": "C2",
+      "sign_code": "W.207a",
+      "shape": "triangle",
+      "width_mm": "900",
+      "height_mm": "900",
+      "work": "retain",
+      "asset_id": "SYNTHETIC-ASSET-6",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "reference": "Synthetic asset fixture",
+      "evidence": "Synthetic readback; no real CAD approval"
+    },
+    {
+      "face_id": "F7",
+      "cluster_id": "C3",
+      "sign_code": "P.102",
+      "shape": "circle",
+      "width_mm": "700",
+      "height_mm": "700",
+      "work": "relocate",
+      "asset_id": "SYNTHETIC-ASSET-7",
+      "status": "verified",
+      "source_snapshot_id": "SYNTHETIC-READBACK-001",
+      "reference": "Synthetic asset fixture",
+      "evidence": "Synthetic readback; no real CAD approval"
+    }
+  ]
+}

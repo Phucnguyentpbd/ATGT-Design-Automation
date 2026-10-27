@@ -1,0 +1,15 @@
+{
+  "note": "Synthetic preview only. Native curve distances are not displayed Civil chainage.",
+  "junctions": [
+    {
+      "snapshot_id": "SYNTHETIC-DEMO", "road_type": "ordinary",
+      "application_evidence": "Synthetic approved no-stop area for preview",
+      "native_curve_distances_verified": true, "constant_width_verified": true,
+      "physical_median_present": false, "width_m": 0.2,
+      "branches": [
+        {"handle": "DEMO-L", "timHandle": "DEMO-C1", "side": "LEFT", "minS": 18, "midS": 20, "maxS": 22, "avgW": 3.5},
+        {"handle": "DEMO-R", "timHandle": "DEMO-C1", "side": "RIGHT", "minS": 22, "midS": 24, "maxS": 26, "avgW": 3.5}
+      ]
+    }
+  ]
+}

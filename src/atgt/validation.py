@@ -3,7 +3,7 @@ import re
 from dataclasses import dataclass
 from .contracts import ProjectContext, SignFace
 
-SIGN_RE = re.compile(r"^(?:[A-Z]+(?:\.[A-Z]+)?)\.[A-Za-z0-9,.-]+$")
+SIGN_RE = re.compile(r"^(?:(?:DP|IE|P|W|R|I|S)\.\d{2,3}[a-z]?|[RS]\.[EGH],\d{1,2}[a-z]?)$")
 ALLOWED_AUTOMATION = {"ordinary", "divided_rural"}
 
 @dataclass(frozen=True)
@@ -13,7 +13,8 @@ class Issue:
     severity: str = "blocked"
 
 def validate_sign_code(code: str) -> bool:
-    return bool(SIGN_RE.fullmatch(code)) and not code.split(".")[0].isdigit()
+    """Syntax only; a valid-looking code still needs source/catalog verification."""
+    return isinstance(code, str) and bool(SIGN_RE.fullmatch(code))
 
 def validate_project(context: ProjectContext) -> list[Issue]:
     errors = []
@@ -37,7 +38,7 @@ def validate_faces(faces: list[SignFace]) -> list[Issue]:
         ids.add(face.face_id)
         if not validate_sign_code(face.sign_code):
             issues.append(Issue("noncanonical_code", face.sign_code))
-        if face.width_mm <= 0 or face.height_mm <= 0:
+        if any(not x.is_finite() or x <= 0 for x in (face.width_mm, face.height_mm)):
             issues.append(Issue("invalid_dimensions", face.face_id))
         if not face.asset_id or not face.reference or face.status != "verified":
             issues.append(Issue("unverified_face", face.face_id))

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<evaluation scope="read-only; locked QCVN source; synthetic contexts" llm_evaluation_run="false">
+  <qa_pair id="tim-va-mep">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "edge", "intervals": [{"snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T1", "edge_handle": "DEMO-EDGE-1", "road_type": "ordinary", "edge_role": "outer_pavement", "scenario": "local_access", "start_m": "100", "end_m": "108", "width_m": "0.20", "carriageway_width_m": "7", "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic opening interval", "direction_evidence": "Synthetic forward direction", "outer_edge_matches_running_edge": true, "turning_permitted": true, "movement_evidence": "Synthetic approved movement for preview"}]}. Tra trang nguồn liên quan, rồi tính đề xuất. Khoảng hở từ mép ngoài vạch đến mép ngoài phần xe chạy là bao nhiêu mét? Chỉ trả số thập phân hai chữ số. Không vẽ CAD.</question>
+    <answer>0.20</answer>
+  </qa_pair>
+  <qa_pair id="loi-mo-thieu-can-cu">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "edge", "intervals": [{"snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T1", "edge_handle": "DEMO-EDGE-1", "road_type": "ordinary", "edge_role": "outer_pavement", "scenario": "local_access", "start_m": "100", "end_m": "108", "width_m": "0.20", "carriageway_width_m": "7", "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic opening interval", "direction_evidence": "Synthetic forward direction", "outer_edge_matches_running_edge": true, "turning_permitted": true, "movement_evidence": null}]}. Tra ý nghĩa vạch mép trong nguồn rồi lập và kiểm tra phương án. Giá trị ready_for_geometry_review là gì? Không vẽ CAD.</question>
+    <answer>false</answer>
+  </qa_pair>
+  <qa_pair id="duoi-bay-met">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "edge", "intervals": [{"snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T1", "edge_handle": "DEMO-EDGE-1", "road_type": "ordinary", "edge_role": "outer_pavement", "scenario": "local_access", "start_m": "100", "end_m": "108", "width_m": "0.20", "carriageway_width_m": "6.5", "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic opening interval", "direction_evidence": "Synthetic forward direction", "outer_edge_matches_running_edge": true, "turning_permitted": true, "movement_evidence": "Synthetic approved movement for preview", "special_necessity_evidence": null}]}. Tra điều kiện áp dụng theo bề rộng trong nguồn rồi lập và kiểm tra phương án. Trạng thái đề xuất là gì? Không vẽ CAD.</question>
+    <answer>blocked</answer>
+  </qa_pair>
+  <qa_pair id="do-thi">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "edge", "intervals": [{"snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T1", "edge_handle": "DEMO-EDGE-1", "road_type": "urban", "edge_role": "outer_pavement", "scenario": "local_access", "start_m": "100", "end_m": "108", "width_m": "0.20", "carriageway_width_m": "7", "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic opening interval", "direction_evidence": "Synthetic forward direction", "outer_edge_matches_running_edge": true, "turning_permitted": true, "movement_evidence": "Synthetic approved movement for preview"}]}. Đối chiếu phạm vi công cụ bằng atgt_status, tra trang nguồn rồi đánh giá ngữ cảnh. Trạng thái đề xuất là gì? Không vẽ CAD.</question>
+    <answer>blocked</answer>
+  </qa_pair>
+  <qa_pair id="mep-dpc">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "edge", "intervals": [{"snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T1", "edge_handle": "DEMO-EDGE-1", "road_type": "divided_rural", "edge_role": "median", "scenario": "median_opening", "start_m": "100", "end_m": "108", "width_m": "0.20", "carriageway_width_m": "7", "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic opening interval", "direction_evidence": "Synthetic forward direction", "outer_edge_matches_running_edge": true, "turning_permitted": true, "movement_evidence": "Synthetic approved movement for preview"}]}. Đối chiếu nguồn và đề xuất. Trường basis.offset.kind phân loại căn cứ khoảng cách tim 0,50 m thế nào? Không vẽ CAD.</question>
+    <answer>user_project_practice</answer>
+  </qa_pair>
+  <qa_pair id="phat-hien-sua">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "edge", "intervals": [{"snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T1", "edge_handle": "DEMO-EDGE-1", "road_type": "ordinary", "edge_role": "outer_pavement", "scenario": "local_access", "start_m": "100", "end_m": "108", "width_m": "0.20", "carriageway_width_m": "7", "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic opening interval", "direction_evidence": "Synthetic forward direction", "outer_edge_matches_running_edge": true, "turning_permitted": true, "movement_evidence": "Synthetic approved movement for preview"}]}. Lập phương án, sửa centerline_offset_m của đề xuất đầu tiên thành "0.50" trong bản dữ liệu trả về rồi gửi kiểm tra với cùng ngữ cảnh gốc. matches_recomputed_plan là gì? Không vẽ CAD.</question>
+    <answer>false</answer>
+  </qa_pair>
+  <qa_pair id="nga-tu">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "box44", "junctions": [{"snapshot_id": "SYNTHETIC-DEMO", "road_type": "ordinary", "application_evidence": "Synthetic approved no-stop area for preview", "native_curve_distances_verified": true, "constant_width_verified": true, "physical_median_present": false, "width_m": 0.2, "branches": [{"handle": "DEMO-L", "timHandle": "DEMO-C1", "side": "LEFT", "minS": 18, "midS": 20, "maxS": 22, "avgW": 3.5}, {"handle": "DEMO-R", "timHandle": "DEMO-C1", "side": "RIGHT", "minS": 22, "midS": 24, "maxS": 26, "avgW": 3.5}]}]}. Tra nguồn về vạch mắt võng, lập phương án rồi kiểm tra nhất quán. Có bao nhiêu ô trong proposals[0].boxes? Không vẽ CAD.</question>
+    <answer>1</answer>
+  </qa_pair>
+  <qa_pair id="co-dai-phan-cach">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "box44", "junctions": [{"snapshot_id": "SYNTHETIC-DEMO", "road_type": "ordinary", "application_evidence": "Synthetic approved no-stop area for preview", "native_curve_distances_verified": true, "constant_width_verified": true, "physical_median_present": true, "width_m": 0.2, "branches": [{"handle": "DEMO-L", "timHandle": "DEMO-C1", "side": "LEFT", "minS": 18, "midS": 20, "maxS": 22, "avgW": 3.5}, {"handle": "DEMO-R", "timHandle": "DEMO-C1", "side": "RIGHT", "minS": 22, "midS": 24, "maxS": 26, "avgW": 3.5}]}]}. Tra nguồn về vạch mắt võng, lập phương án rồi kiểm tra nhất quán. Có bao nhiêu ô trong proposals[0].boxes? Không vẽ CAD.</question>
+    <answer>0</answer>
+  </qa_pair>
+  <qa_pair id="chua-do-curve">
+    <question>Dùng MCP ATGT, dữ liệu hoàn toàn giả định sau: {"kind": "box44", "junctions": [{"snapshot_id": "SYNTHETIC-DEMO", "road_type": "ordinary", "application_evidence": "Synthetic approved no-stop area for preview", "native_curve_distances_verified": false, "constant_width_verified": true, "physical_median_present": false, "width_m": 0.2, "branches": [{"handle": "DEMO-L", "timHandle": "DEMO-C1", "side": "LEFT", "minS": 18, "midS": 20, "maxS": 22, "avgW": 3.5}, {"handle": "DEMO-R", "timHandle": "DEMO-C1", "side": "RIGHT", "minS": 22, "midS": 24, "maxS": 26, "avgW": 3.5}]}]}. Tra nguồn về vạch mắt võng, lập phương án rồi kiểm tra nhất quán. Có bao nhiêu ô trong proposals[0].boxes? Không vẽ CAD.</question>
+    <answer>0</answer>
+  </qa_pair>
+  <qa_pair id="bien-cam-nguoc-chieu">
+    <question>Tra biển cấm đi ngược chiều trong nguồn QCVN đã khóa; đối chiếu mã đầy đủ và dùng atgt_resolve_asset tìm block từ thư viện. Với dữ liệu của bản triển khai 25/10/2026, trường resolution của kết quả tìm block là gì? Chỉ trả một từ, không suy từ việc chỉ có một ứng viên rằng hình học đã được duyệt.</question>
+    <answer>blocked</answer>
+  </qa_pair>
+</evaluation>

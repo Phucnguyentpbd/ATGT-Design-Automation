@@ -11,6 +11,8 @@ __pycache__/
 *.xls
 local-sources/
 output/
+outputs/
+/tmp/
 
 # Keep user CAD standards and inspection products local
 *.lin
@@ -18,3 +20,9 @@ output/
 *.sqlite3
 *.db
 local-manifests/
+.harkness/
+bin/
+obj/
+# Leftover isolated Core Console startup temp files (not project content)
+/ATGTInspection/
+/ErrorReports/

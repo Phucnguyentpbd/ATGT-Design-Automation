@@ -1,0 +1,27 @@
+{
+  "note": "Synthetic preview inputs only; not a measured project or CAD insertion authority.",
+  "intervals": [
+    {
+      "snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T1", "edge_handle": "DEMO-EDGE-1",
+      "road_type": "ordinary", "edge_role": "outer_pavement", "scenario": "continuous",
+      "start_m": "0", "end_m": "100", "width_m": "0.20", "carriageway_width_m": "7",
+      "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic edge for preview",
+      "direction_evidence": "Synthetic forward direction", "outer_edge_matches_running_edge": true
+    },
+    {
+      "snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T1", "edge_handle": "DEMO-EDGE-1",
+      "road_type": "ordinary", "edge_role": "outer_pavement", "scenario": "local_access",
+      "start_m": "100", "end_m": "108", "width_m": "0.20", "carriageway_width_m": "7",
+      "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic opening interval",
+      "direction_evidence": "Synthetic forward direction", "outer_edge_matches_running_edge": true,
+      "turning_permitted": true, "movement_evidence": "Synthetic approved movement for preview"
+    },
+    {
+      "snapshot_id": "SYNTHETIC-DEMO", "alignment_id": "DEMO-T2", "edge_handle": "DEMO-MEDIAN",
+      "road_type": "divided_rural", "edge_role": "median", "scenario": "median_opening",
+      "start_m": "200", "end_m": "210", "width_m": "0.20", "carriageway_width_m": "7",
+      "available_paved_width_m": "3.5", "boundary_evidence": "Synthetic median opening",
+      "direction_evidence": "Synthetic forward direction", "turning_permitted": null
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "standard": "TCVN 4054:2005",
+  "title": "Duong o to - Yeu cau thiet ke",
+  "sha256": "b3ddcc3424dec93e9bc2b83ba0d3dc9d42f472bdcf4149e6ff6c8dde0a5359f1",
+  "used_reference": "5.1.1, Bang 10, PDF page 19",
+  "scope": "stopping-sight-distance fallback for sign placement proposals",
+  "repository_contains_source_pdf": false
+}
