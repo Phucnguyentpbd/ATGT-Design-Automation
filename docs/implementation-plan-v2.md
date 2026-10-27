@@ -2,7 +2,7 @@
 
 Ngày cập nhật: 24/10/2026, múi giờ Asia/Bangkok.
 
-Trạng thái cập nhật: đã có chỉ mục knowledge, kiểm kê nguồn và bộ lập phương án 3.1a/3.1b/4.4; chưa thực thi CAD hoặc xuất khối lượng dự án mới. Xem audit-and-rules-2026-10-24.md và marking-rules.md.
+Trạng thái cập nhật: đã có chỉ mục knowledge, kiểm kê nguồn, bộ lập phương án 3.1a/3.1b/4.4, bộ xuất Book2 và MCP ghi Civil tách riêng. Đã thực thi/nghiệm thu một cụm ghi chú biển trên bản QA của TÂY VẠN CANH; chưa thực thi vạch sơn toàn tuyến hoặc xuất khối lượng dự án thật. Xem audit-and-rules-2026-10-24.md, marking-rules.md và plans/2026-10-25-cad-execution-design.md.
 
 ## 1. Mục tiêu, phạm vi và nguồn được chốt
 
@@ -172,7 +172,7 @@ Các tác vụ phân tích chạy song song trên snapshot. Một đầu mối q
 1. Xác nhận đúng bản vẽ/đơn vị/hệ tọa độ; bảo toàn DWG nguồn, làm việc trên bản sao.
 2. Ánh xạ layer/block, trích hình học; hỗ trợ Civil Alignment và polyline đủ điều kiện.
 3. Phân loại từng đoạn/nhánh; tạo mô hình chiều chạy, làn, dải phân cách và nút.
-4. Kiểm tra dữ liệu đầu vào: tốc độ thiết kế khác tốc độ vận hành/hạn chế; ưu tiên và hướng rẽ cần nguồn. Không dùng bình đồ 2D để xác nhận điều kiện phụ thuộc tầm nhìn chưa biết.
+4. Kiểm tra dữ liệu đầu vào: tốc độ thiết kế khác tốc độ vận hành/hạn chế; ưu tiên và hướng rẽ cần nguồn. Với vị trí biển, khoảng cách riêng trong QCVN có ưu tiên; chỉ khi đã xác nhận không có khoảng cách số mới dùng S1 của TCVN 4054:2005 Bảng 10. S1 không tự chứng minh tầm nhìn thực tế thông thoáng.
 5. Tra quy tắc và ca mẫu; lập phương án theo tình huống, giữ nguyên phạm vi nút và ảnh hưởng liên đoạn.
 6. Kiểm tra phương án; giữ lại các quyết định phụ thuộc dữ kiện còn thiếu; tiếp tục phần độc lập.
 7. Vẽ theo mẫu C# đã kiểm định, từng lô tối đa 30–50 đối tượng, giảm khi nặng; ngưỡng giám sát 15–30 giây. Hết thời gian chờ thì ngừng gửi thêm lệnh, xác định kết quả lô trước khi thử lại; không xem timeout là bằng chứng đã rollback.

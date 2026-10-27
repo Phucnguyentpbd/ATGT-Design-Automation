@@ -1,0 +1,18 @@
+{
+  "signs": [
+    {
+      "snapshot_id": "synthetic-sign-snapshot",
+      "alignment_id": "SYNTHETIC-T1",
+      "target_id": "hazard-1",
+      "sign_code": "W.201a",
+      "road_type": "ordinary",
+      "travel_direction": "increasing",
+      "design_speed_kmh": 60,
+      "alignment_start_m": 0,
+      "alignment_end_m": 1000,
+      "target_station_m": 500,
+      "qcvn_search_evidence": "Synthetic example: applicable QCVN sign clause reviewed; no numeric distance found",
+      "qcvn_no_numeric_distance_confirmed": true
+    }
+  ]
+}

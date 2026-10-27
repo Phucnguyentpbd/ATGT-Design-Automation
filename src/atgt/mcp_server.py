@@ -71,7 +71,65 @@ class BoxRequest(Input):
     junctions: list[BoxInput] = Field(min_length=1, max_length=10)
 
 
-Request = Annotated[EdgeRequest | BoxRequest, Field(discriminator="kind")]
+class SignPositionInput(Input):
+    snapshot_id: Text
+    alignment_id: Text
+    target_id: Text
+    sign_code: Annotated[StrictStr, Field(pattern=r"^(?:P|W|R|I|DP|S|IE|RE)\.[0-9]+[A-Za-z]?$", max_length=20)]
+    road_type: Literal["ordinary", "divided_rural", "urban", "expressway"]
+    travel_direction: Literal["increasing", "decreasing"]
+    design_speed_kmh: Annotated[int, Field(ge=1, le=200)]
+    alignment_start_m: Number
+    alignment_end_m: Number
+    target_station_m: Number
+    qcvn_search_evidence: Text
+    qcvn_no_numeric_distance_confirmed: StrictBool
+    qcvn_distance_m: Number | None = None
+    qcvn_distance_reference: Text | None = None
+
+
+class SignPlacementRequest(Input):
+    kind: Literal["sign_placement"]
+    signs: list[SignPositionInput] = Field(min_length=1, max_length=50)
+
+
+class WarningJunctionInput(Input):
+    junction_id: Text
+    station_m: Number
+    priority_relationship: Literal["equal", "side_road_non_priority"]
+    candidate_sign_code: Annotated[StrictStr, Field(pattern=r"^W\.(?:205[a-e]|207(?:[a-i]|k|l))$", max_length=20)]
+    branch_side: Literal["left", "right", "both"]
+    geometry_evidence: Text
+    priority_evidence: Text
+
+
+class JunctionWarningInput(Input):
+    snapshot_id: Text
+    alignment_id: Text
+    road_type: Literal["ordinary", "divided_rural", "urban", "expressway"]
+    travel_direction: Literal["increasing", "decreasing"]
+    design_speed_kmh: Annotated[int, Field(ge=1, le=200)]
+    alignment_start_m: Number
+    alignment_end_m: Number
+    qcvn_search_evidence: Text
+    junctions: list[WarningJunctionInput] = Field(min_length=1, max_length=50)
+
+
+class JunctionWarningRequest(Input):
+    kind: Literal["junction_warning"]
+    corridors: list[JunctionWarningInput] = Field(min_length=1, max_length=10)
+
+
+Request = Annotated[
+    EdgeRequest | BoxRequest | SignPlacementRequest | JunctionWarningRequest,
+    Field(discriminator="kind"),
+]
+
+RuleSection = Literal[
+    "all", "source_precedence", "project_inputs", "priority", "sign_position",
+    "junction_grouping", "marking_3_1a", "marking_3_1b", "marking_4_4",
+    "annotation", "assets", "statistics", "cad_safety", "agent_behavior",
+]
 
 
 def create_server(service: ATGTService) -> FastMCP:
@@ -85,6 +143,15 @@ def create_server(service: ATGTService) -> FastMCP:
     def atgt_status() -> dict[str, Any]:
         """Read source hashes, inventory counts and current implementation boundary."""
         return service.status()
+
+    @mcp.tool(annotations=annotations)
+    def atgt_get_project_rules(section: RuleSection = "all") -> dict[str, Any]:
+        """Load the versioned user-approved ruleset or one focused section.
+
+        Call this after atgt_status at the start of every ATGT task. These project rules
+        complement but never override a more specific QCVN requirement.
+        """
+        return service.get_project_rules(section)
 
     @mcp.tool(annotations=annotations)
     def atgt_search(query: Annotated[str, Field(min_length=1, max_length=200)],
@@ -110,7 +177,7 @@ def create_server(service: ATGTService) -> FastMCP:
 
     @mcp.tool(annotations=annotations)
     def atgt_evaluate_rules(request: Request) -> dict[str, Any]:
-        """Propose 3.1a/3.1b or skill-based simple 4.4 from measured contexts; never infer missing evidence."""
+        """Propose markings or source-separated sign positions; never infer missing evidence."""
         return service.evaluate(request.model_dump(mode="json"))
 
     @mcp.tool(annotations=annotations)
@@ -126,9 +193,14 @@ def main():
     parser.add_argument("--db", required=True, type=Path)
     parser.add_argument("--lin", required=True, type=Path)
     parser.add_argument("--lin-sha256", default=LIN_SHA)
+    parser.add_argument("--tcvn4054", type=Path,
+                        help="Locked TCVN 4054:2005 PDF for stopping-sight-distance fallback")
+    parser.add_argument("--rules", type=Path,
+                        help="Versioned user-approved ATGT project rules TOML")
     args = parser.parse_args()
     try:
-        service = ATGTService(args.db, args.lin, args.lin_sha256)
+        service = ATGTService(args.db, args.lin, args.lin_sha256, args.tcvn4054,
+                              project_rules_path=args.rules)
     except (ValueError, OSError) as exc:
         parser.error(str(exc))
     create_server(service).run(transport="stdio")

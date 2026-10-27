@@ -12,6 +12,7 @@ __pycache__/
 local-sources/
 output/
 outputs/
+/tmp/
 
 # Keep user CAD standards and inspection products local
 *.lin

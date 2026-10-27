@@ -3,6 +3,8 @@
 Ngày 24/10/2026. Các hàm trong tài liệu trả về **phương án dự kiến**, chưa gửi lệnh vẽ.
 Nguồn QCVN: bản PDF 403 trang, SHA-256 `84825a72c4605b65485f3d31a606525a9bc96c970a5200defc0781496ddbbd46`.
 
+> Tài liệu này giải thích và dẫn nguồn cho con người, không phải nơi agent nạp quy tắc. Nguồn máy đọc duy nhất cho quy tắc dự án là `D:\DOCUMENT\TCVN\TIEU CHUAN TK ATGT\ATGT_PROJECT_RULES.toml`, được MCP khóa theo `ruleset_id` và SHA-256.
+
 ## Vạch 3.1a và 3.1b
 
 `atgt.edge_rules.propose_edge_marking` áp dụng cho từng khoảng đã phân loại trên đường thông thường hoặc đường đôi ngoài đô thị.
@@ -68,8 +70,10 @@ python -m atgt.planning_cli --kind box44 --input examples/box44-contexts.json --
 
 ## Ghi chú biển và thống kê
 
-Đọc mẫu `BD TK ATGT DA DT.633.dwg` trước, `BD TK ATGT TAY VAN CANH.dwg` bổ sung khi cần. Việc đọc mũi tên/lý trình được người dùng dời sang lượt sau. Chưa có bằng chứng đây là MLeader, Leader+Text hay block tổ hợp; không gán sẵn một kiểu.
+Nguồn mẫu duy nhất do người dùng chọn ngày 25/10/2026 là `BD TK ATGT TAY VAN CANH.dwg`; không dùng DT.633. Kiểm kê live trên MCP 8070 xác nhận mẫu chủ đạo là `LEADER` cổ điển 3 đỉnh trên layer `BIEN-BAO`, dimstyle `duonggiao`, chữ `DBText` ARIALH cao 2,0 và block biển tại đỉnh cuối. Archetype chuẩn được nhận dạng bằng quan hệ hình học của `km7+409` + block `207a_245a`, không dùng handle vì `Wblock` đổi handle.
 
-Lượt sau cần lấy: handle/nhóm đối tượng, điểm đầu mũi tên, đường dẫn, điểm đặt chữ, mã biển, định dạng lý trình, style/font/chiều cao, tỷ lệ trình bày, hướng xoay, tim tham chiếu và cách gom nhiều biển. Lưu mẫu theo tọa độ tương đối quanh điểm đặt biển; lý trình phải tính lại theo tim dự án mới. Ký hiệu trình bày không quyết định kích thước mặt biển thực tế.
+Mẫu chuẩn có đoạn leader đầu khoảng 20,1478 m, đoạn cuối khoảng 3,8420 m; chữ cách đỉnh mũi tên khoảng 5,3405 m. Đây là thông số trình bày của dự án mẫu, không phải quy định QCVN. Các mẫu I.439, leader 2 đỉnh, ISO-25 và nền vàng là ngoại lệ, chưa được tự động hóa. Lý trình dự án mới vẫn phải tính từ đúng tim/station equation; ký hiệu trình bày không quyết định kích thước mặt biển thực tế.
+
+MCP `atgt-cad` clone text/leader theo phép quay+dời quanh điểm chèn biển, tạo block theo tên đã có trong bản làm việc, gắn XData `ATGT_AGENT`, rồi đọc lại loại đối tượng, nội dung, layer, block, rotation, scale và quan hệ điểm. Chỉ cụm đủ ba phần mới được ghi receipt xác minh.
 
 Mẫu Excel hiện hành là `Book2.xlsx`, SHA-256 `19672f2be596f471afbfeef0294b1831e1c148a14030dcc901f71f39f8d73985`. Loại cột biển do người dùng nhập, không suy ra và không tính khối lượng cột. Chỉ dùng đối tượng CAD đã đọc lại, không lấy khối lượng dự án mẫu hoặc độ dài chênh lý trình để thay thế chiều dài sơn thực trên đường cong.

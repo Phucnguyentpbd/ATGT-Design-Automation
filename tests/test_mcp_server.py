@@ -41,7 +41,60 @@ def sources(tmp_path):
         db.execute("INSERT INTO cad_assets VALUES ('fixture-102','Bien_Cam/102.dwg',?,'[\"P.102\"]','unverified')",('a'*64,))
     lin=tmp_path/'test.lin'
     lin.write_text('*VACH_3.1B_0.6M,Synthetic\nA,0.6,-0.6\n',encoding='utf-8')
-    return dbpath,lin
+    rules=tmp_path/'rules.toml'
+    rules.write_text(r'''
+schema_version=1
+ruleset_id="ATGT-TEST-RULES-V1"
+effective_date="2026-10-26"
+language="vi"
+scope=["ordinary","divided_rural"]
+[source_precedence]
+qcvn_specific_overrides_user_rule=true
+[project_inputs]
+layer_names_are_never_reused_as_defaults=true
+[priority]
+main_route_default="priority"
+cross_roads_default="non_priority"
+same_level_family="W.205"
+non_priority_branch_family="W.207"
+[sign_position]
+tcvn4054_s1_is_fallback_only_after_qcvn_search=true
+[junction_grouping]
+group_when_consecutive_station_gap_is_less_than_s1=true
+equal_to_s1_starts_new_group=true
+all_non_priority_dense_group_codes=["W.207d","W.207e"]
+s501_length_from_sign_to_last_junction=true
+s501_rounding_m=10
+[marking_3_1a]
+outer_edge_centerline_offset_m=0.30
+median_edge_centerline_offset_m=0.50
+[marking_3_1b]
+linetype="VACH_3.1B_0.6M"
+[marking_4_4]
+legacy_writer_allowed=false
+[annotation]
+archetype_drawing="E:\\TEMPLATE CV\\BINH DO ATGT DU AN MAU\\BD TK ATGT TAY VAN CANH.dwg"
+excluded_archetype_drawing="BD TK ATGT DA DT.633.dwg"
+[assets]
+asset_catalog="C:\\fixture\\atgt-asset-catalog.json"
+asset_catalog_id="ATGT-ASSETS-TEST-V1"
+sign_code_requires_prefix=true
+asset_geometry_review_required_before_insert=true
+agent_must_resolve_asset_id_before_import=true
+agent_must_not_pass_arbitrary_asset_paths=true
+[statistics]
+post_type_is_not_inferred=true
+post_quantity_is_not_automated=true
+[cad_safety]
+source_dwg_must_not_be_saved=true
+distinct_work_copy_required=true
+one_writer_per_drawing=true
+readback_required_before_save=true
+[agent_behavior]
+load_rules_at_start_of_every_task=true
+do_not_repeat_rules_in_user_prompt=true
+''',encoding='utf-8')
+    return dbpath,lin,rules
 
 
 def edge_request():
@@ -55,11 +108,12 @@ def edge_request():
 
 
 def test_stdio_workflow_and_source_drift(sources):
-    db,lin=sources
+    db,lin,rules=sources
     before=digest(db)
     source_dir=str(Path(__file__).resolve().parents[1]/'src')
     params=StdioServerParameters(command=sys.executable,
-        args=['-m','atgt.mcp_server','--db',str(db),'--lin',str(lin),'--lin-sha256',digest(lin)],
+        args=['-m','atgt.mcp_server','--db',str(db),'--lin',str(lin),'--lin-sha256',digest(lin),
+              '--rules',str(rules)],
         env={**os.environ,'PYTHONPATH':source_dir,'PYTHONUTF8':'1'})
 
     async def run():
@@ -68,7 +122,8 @@ def test_stdio_workflow_and_source_drift(sources):
                 await session.initialize()
                 definitions=(await session.list_tools()).tools
                 names={t.name for t in definitions}
-                assert names=={'atgt_status','atgt_search','atgt_get','atgt_resolve_asset','atgt_evaluate_rules','atgt_validate_plan'}
+                assert names=={'atgt_status','atgt_get_project_rules','atgt_search','atgt_get',
+                               'atgt_resolve_asset','atgt_evaluate_rules','atgt_validate_plan'}
                 assert all(t.annotations.readOnlyHint and not t.annotations.destructiveHint and t.outputSchema for t in definitions)
 
                 async def call(name,**kwargs):
@@ -79,6 +134,10 @@ def test_stdio_workflow_and_source_drift(sources):
 
                 status=await call('atgt_status')
                 assert status['counts']['pages']==3 and status['sources']['knowledge_sha256']==before
+                loaded_rules=await call('atgt_get_project_rules',section='priority')
+                assert loaded_rules['ruleset_id']=='ATGT-TEST-RULES-V1'
+                assert loaded_rules['rules']['main_route_default']=='priority'
+                assert status['sources']['project_rules_sha256']==digest(rules)
                 first=await call('atgt_search',query='P.102',limit=1)
                 second=await call('atgt_search',query='P.102',limit=1,offset=first['next_offset'])
                 assert first['total_count']==2 and first['has_more'] and not second['has_more']
@@ -96,6 +155,8 @@ def test_stdio_workflow_and_source_drift(sources):
 
                 request=edge_request()
                 plan=await call('atgt_evaluate_rules',request=request)
+                assert plan['sources']['project_ruleset_id']=='ATGT-TEST-RULES-V1'
+                assert plan['sources']['project_rules_sha256']==digest(rules)
                 assert plan['proposals'][0]['marking_code']=='3.1b'
                 assert plan['proposals'][0]['centerline_offset_m']=='0.30'
                 checked=await call('atgt_validate_plan',request=request,candidate=plan)
@@ -120,6 +181,15 @@ def test_stdio_workflow_and_source_drift(sources):
                 assert boxes['blocked_count']==0 and len(boxes['proposals'][0]['boxes'])==1
                 box_request['junctions'][0]['physical_median_present']=True
                 assert (await call('atgt_evaluate_rules',request=box_request))['blocked_count']==1
+                sign_request={'kind':'sign_placement','signs':[{
+                    'snapshot_id':'fixture-snapshot','alignment_id':'T1','target_id':'hazard-1',
+                    'sign_code':'W.201a','road_type':'ordinary','travel_direction':'increasing',
+                    'design_speed_kmh':60,'alignment_start_m':'0','alignment_end_m':'1000',
+                    'target_station_m':'500','qcvn_search_evidence':'fixture reviewed search',
+                    'qcvn_no_numeric_distance_confirmed':True}]}
+                sign_plan=await call('atgt_evaluate_rules',request=sign_request)
+                assert sign_plan['blocked_count']==1
+                assert 'tcvn4054_source_not_configured_or_verified' in sign_plan['proposals'][0]['issues']
                 assert digest(db)==before  # All preceding calls preserve source bytes.
                 with sqlite3.connect(db) as writer:
                     writer.execute("UPDATE pages SET text='external modification' WHERE page=80")
@@ -129,7 +199,7 @@ def test_stdio_workflow_and_source_drift(sources):
 
 
 def test_source_binding_rejects_wrong_pdf_and_missing_db(sources,tmp_path):
-    db,lin=sources
+    db,lin,_=sources
     with sqlite3.connect(db) as writer:
         writer.execute("UPDATE metadata SET value=? WHERE key='qcvn_pdf_sha256'",('0'*64,))
     with pytest.raises(ValueError,match='locked QCVN'):
@@ -137,3 +207,24 @@ def test_source_binding_rejects_wrong_pdf_and_missing_db(sources,tmp_path):
     missing=tmp_path/'missing.sqlite'
     with pytest.raises(FileNotFoundError):ATGTService(missing,lin,digest(lin))
     assert not missing.exists()
+    fake_tcvn=tmp_path/'tcvn4054.pdf'
+    fake_tcvn.write_bytes(b'not the locked TCVN 4054 source')
+    with pytest.raises(ValueError,match='TCVN 4054 checksum mismatch'):
+        ATGTService(db,lin,digest(lin),fake_tcvn)
+
+
+def test_project_rules_are_required_for_evaluation_and_bound_for_the_session(sources):
+    db,lin,rules=sources
+    unconfigured=ATGTService(db,lin,digest(lin))
+    with pytest.raises(ValueError,match='Project rules are not configured'):
+        unconfigured.evaluate(edge_request())
+
+    service=ATGTService(db,lin,digest(lin),project_rules_path=rules)
+    assert service.get_project_rules('priority')['rules']['main_route_default']=='priority'
+    original=rules.read_text(encoding='utf-8')
+    rules.write_text(original.replace('main_route_default="priority"',
+                                      'main_route_default="equal"'),encoding='utf-8')
+    with pytest.raises(ValueError,match='Configured project rules changed'):
+        service.status()
+    with pytest.raises(ValueError,match='incompatible with the executable rules'):
+        ATGTService(db,lin,digest(lin),project_rules_path=rules)

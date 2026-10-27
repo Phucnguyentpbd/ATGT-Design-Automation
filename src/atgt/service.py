@@ -9,20 +9,36 @@ import sqlite3
 from .box44_rules import propose_boxes
 from .edge_rules import context_from_dict, propose_edge_marking
 from .linetypes import parse_lin
+from .project_rules import ProjectRules
 from .qcvn_ingest import PDF_SHA, code_normalize, digest
+from .sign_placement_rules import (
+    TCVN_4054_PDF_SHA,
+    junction_context_from_dict,
+    propose_junction_warnings,
+    propose_sign_position,
+    sign_context_from_dict,
+)
 from .validation import validate_sign_code
 
 LIN_SHA = "e4484f094b128c53914b91b1c88bfc6b8b6263452a6767c1346f8427a3b15c99"
 
 
 class ATGTService:
-    def __init__(self, db_path: Path, lin_path: Path, lin_sha256: str = LIN_SHA):
+    def __init__(self, db_path: Path, lin_path: Path, lin_sha256: str = LIN_SHA,
+                 tcvn4054_path: Path | None = None,
+                 tcvn4054_sha256: str = TCVN_4054_PDF_SHA,
+                 project_rules_path: Path | None = None):
         self.db_path = db_path.resolve(strict=True)
         self.lin_path = lin_path.resolve(strict=True)
         self.db_sha = digest(self.db_path)
         self.lin_sha = digest(self.lin_path)
         if self.lin_sha != lin_sha256:
             raise ValueError("LIN checksum mismatch; verify the configured library version")
+        self.tcvn4054_path = tcvn4054_path.resolve(strict=True) if tcvn4054_path else None
+        self.tcvn4054_sha = digest(self.tcvn4054_path) if self.tcvn4054_path else None
+        if self.tcvn4054_sha is not None and self.tcvn4054_sha != tcvn4054_sha256:
+            raise ValueError("TCVN 4054 checksum mismatch; verify the configured source version")
+        self.project_rules = ProjectRules(project_rules_path) if project_rules_path else None
         self.patterns = parse_lin(self.lin_path)
         with self._db() as db:
             try:
@@ -34,7 +50,11 @@ class ATGTService:
 
     @contextmanager
     def _db(self):
-        if digest(self.db_path) != self.db_sha or digest(self.lin_path) != self.lin_sha:
+        if self.project_rules is not None:
+            self.project_rules.assert_unchanged()
+        tcvn_changed = (self.tcvn4054_path is not None and
+                        digest(self.tcvn4054_path) != self.tcvn4054_sha)
+        if digest(self.db_path) != self.db_sha or digest(self.lin_path) != self.lin_sha or tcvn_changed:
             raise ValueError("Configured sources changed; restart after verifying the new source versions")
         db = sqlite3.connect(self.db_path.as_uri() + "?mode=ro", uri=True)
         db.row_factory = sqlite3.Row
@@ -45,9 +65,13 @@ class ATGTService:
             db.close()
 
     def _envelope(self, **result):
+        rules = self.project_rules.summary() if self.project_rules is not None else None
         return {"schema_version": 1, "cad_execution_allowed": False,
                 "sources": {"pdf_sha256": PDF_SHA, "knowledge_sha256": self.db_sha,
-                            "lin_sha256": self.lin_sha}, **result}
+                            "lin_sha256": self.lin_sha,
+                            "tcvn4054_pdf_sha256": self.tcvn4054_sha,
+                            "project_rules_sha256": rules["sha256"] if rules else None,
+                            "project_ruleset_id": rules["ruleset_id"] if rules else None}, **result}
 
     @staticmethod
     def _page(items, total, offset, limit):
@@ -61,7 +85,22 @@ class ATGTService:
                       for name in ("pages", "articles", "cad_assets", "line_patterns")}
         return self._envelope(status="ready_read_only", counts=counts,
                               design_status="proposal_only", live_cad_verified=False,
-                              scope=["ordinary", "divided_rural"])
+                              scope=["ordinary", "divided_rural"],
+                              project_rules=self.project_rules.summary() if self.project_rules else {
+                                  "loaded": False,
+                                  "reason": "Configure --rules before evaluating project rules"})
+
+    def get_project_rules(self, section: str = "all"):
+        with self._db():
+            pass
+        if self.project_rules is None:
+            raise ValueError("Project rules are not configured; start the server with --rules")
+        return self._envelope(
+            ruleset_id=self.project_rules.ruleset_id,
+            section=section,
+            rules=self.project_rules.get(section),
+            interpretation=("User-approved project rules; keep their provenance distinct from "
+                            "QCVN/TCVN source requirements"))
 
     def search(self, query: str, limit: int = 5, offset: int = 0):
         query = query.strip()
@@ -135,10 +174,12 @@ class ATGTService:
         # Keep source version check even when no text lookup is required.
         with self._db():
             pass
+        if self.project_rules is None:
+            raise ValueError("Project rules are not configured; load the versioned ruleset before evaluation")
         if request["kind"] == "edge":
             items = request["intervals"]
             proposals = [propose_edge_marking(context_from_dict(item), self.patterns) for item in items]
-        else:
+        elif request["kind"] == "box44":
             items = request["junctions"]
             proposals = []
             for item in deepcopy(items):
@@ -147,6 +188,16 @@ class ATGTService:
                         b[key] = float(b[key])
                 item["width_m"] = float(item.get("width_m", .20))
                 proposals.append(propose_boxes(**item))
+        elif request["kind"] == "sign_placement":
+            items = request["signs"]
+            proposals = [propose_sign_position(
+                sign_context_from_dict(item), tcvn_source_verified=self.tcvn4054_sha is not None)
+                for item in items]
+        else:
+            items = request["corridors"]
+            proposals = [propose_junction_warnings(
+                junction_context_from_dict(item), tcvn_source_verified=self.tcvn4054_sha is not None)
+                for item in items]
         snapshots = {item["snapshot_id"] for item in items}
         if len(snapshots) != 1:
             raise ValueError("One evaluation batch must use one drawing snapshot")

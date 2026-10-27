@@ -53,7 +53,7 @@ Book2.xlsx còn 384 phần liên kết ngoài, 4.484 defined names và tám ô l
 
 ## Thứ tự làm tiếp
 
-1. Mở mẫu DT.633, xác nhận MCP và định danh bản vẽ; đọc mũi tên, text/lý trình, nhóm biển, style và cách bố trí. Tay Vân Canh là nguồn bổ sung. Không tạo lại thư viện vạch sơn.
+1. Nguồn mẫu đã được thay bằng TÂY VẠN CANH duy nhất. Kiểm kê MCP 8070 và archetype `km7+409`/`207a_245a` đã được ghi ở `docs/marking-rules.md`; không dùng DT.633 và không tạo lại thư viện vạch sơn.
 2. Thử trên bản sao đoạn ngắn có mép ngoài, dải phân cách, nhánh dân sinh; kiểm tra đường cong, bề rộng thay đổi và phạm vi cấm dừng. Duyệt hình học template và block 7.6/9.3.
 3. Hoàn thiện dữ liệu ngữ nghĩa bình đồ và bộ ghi theo mã sở hữu/phiên chạy, kiểm tra đọc lại. Tách khoảng cách curve, lý trình alignment và chiều dài thực của đường offset.
 4. Đo bóc theo đối tượng đã đọc lại, xuất Book2.xlsx; loại cột biển giữ thủ công. Kiểm tra công thức, hình, tổng theo đoạn và vùng in trong Excel thật.
